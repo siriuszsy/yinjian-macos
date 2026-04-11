@@ -1,0 +1,7 @@
+{
+  "triggerKey": "commandSemicolon",
+  "microphoneDeviceID": "system-default",
+  "cleanupEnabled": true,
+  "showHUD": true,
+  "fallbackPasteEnabled": true
+}

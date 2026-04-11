@@ -1,0 +1,34 @@
+.DS_Store
+.build
+DerivedData
+.derived
+xcuserdata
+*.xcuserstate
+*.moved-aside
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Xcode generated artifacts
+tinyTypeless.xcodeproj/project.xcworkspace/xcuserdata
+tinyTypeless.xcodeproj/xcuserdata
+
+# Local app data
+tmp
+sessions.jsonl
+settings.json
+
+# Local release/build artifacts
+dist
+release-assets
+runtime-shell/*.app
+
+# Local signing materials
+codesign/*.p12
+codesign/*.pem
+codesign/*.cer
+codesign/*.key
+codesign/*.mobileprovision
+
+# Local API keys
+dashscope-api-key.txt

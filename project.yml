@@ -1,0 +1,54 @@
+name: tinyTypeless
+
+options:
+  createIntermediateGroups: true
+  minimumXcodeGenVersion: 2.38.0
+
+configs:
+  Debug: debug
+  Release: release
+
+settings:
+  base:
+    PRODUCT_NAME: tinyTypeless
+    PRODUCT_BUNDLE_IDENTIFIER: com.littlerobot.tinyTypeless
+    SWIFT_VERSION: 6.0
+    MACOSX_DEPLOYMENT_TARGET: 14.0
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 0.1.0
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  tinyTypeless:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: tinyTypeless
+        excludes:
+          - Resources
+    resources:
+      - path: tinyTypeless/Resources
+    info:
+      path: tinyTypeless/Support/Info.plist
+      properties:
+        CFBundleDisplayName: tinyTypeless
+        LSUIElement: true
+        NSMicrophoneUsageDescription: tinyTypeless needs microphone access to capture dictation audio.
+    settings:
+      base:
+        INFOPLIST_FILE: tinyTypeless/Support/Info.plist
+        PRODUCT_MODULE_NAME: tinyTypeless
+
+  tinyTypelessTests:
+    type: bundle.unit-test
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - path: tinyTypelessTests
+    dependencies:
+      - target: tinyTypeless
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.littlerobot.tinyTypelessTests

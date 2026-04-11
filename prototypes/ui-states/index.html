@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tinyTypeless UI Prototype</title>
+    <style>
+      :root {
+        --bg: #f4efe5;
+        --bg-deep: #d9cfbf;
+        --ink: #1d1a16;
+        --muted: #6d655c;
+        --panel: rgba(255, 251, 244, 0.78);
+        --panel-strong: rgba(255, 252, 248, 0.92);
+        --line: rgba(40, 33, 26, 0.12);
+        --accent: #cc5a1f;
+        --accent-soft: rgba(204, 90, 31, 0.14);
+        --good: #1f7a4c;
+        --warn: #c66b12;
+        --bad: #b5342d;
+        --shadow: 0 20px 70px rgba(33, 24, 17, 0.14);
+        --radius-xl: 28px;
+        --radius-lg: 22px;
+        --radius-md: 16px;
+        --radius-sm: 12px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(204, 90, 31, 0.14), transparent 34%),
+          radial-gradient(circle at bottom right, rgba(31, 122, 76, 0.14), transparent 30%),
+          linear-gradient(180deg, #f8f3ea 0%, #efe7d8 100%);
+        min-height: 100vh;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(29, 26, 22, 0.03) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(29, 26, 22, 0.03) 1px, transparent 1px);
+        background-size: 32px 32px;
+        mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent);
+      }
+
+      .page {
+        width: min(1320px, calc(100vw - 48px));
+        margin: 0 auto;
+        padding: 40px 0 80px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.3fr 0.9fr;
+        gap: 24px;
+        align-items: end;
+      }
+
+      .hero-card,
+      .decision-card,
+      .surface,
+      .state-card,
+      .desktop,
+      .note-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
+      }
+
+      .hero-card {
+        padding: 28px 30px 30px;
+        border-radius: var(--radius-xl);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(29, 26, 22, 0.06);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 18px;
+        font-size: clamp(34px, 5vw, 62px);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+      }
+
+      .hero-copy {
+        margin-top: 18px;
+        max-width: 760px;
+        font-size: 18px;
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      .decision-card {
+        padding: 24px;
+        border-radius: var(--radius-xl);
+      }
+
+      .decision-list {
+        margin-top: 14px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .decision-row {
+        display: grid;
+        grid-template-columns: 112px 1fr;
+        gap: 14px;
+        align-items: start;
+        padding: 14px;
+        border-radius: var(--radius-md);
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .decision-row strong {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .section {
+        margin-top: 28px;
+      }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+        margin-bottom: 16px;
+      }
+
+      .section-head p {
+        max-width: 720px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .surface-grid {
+        display: grid;
+        grid-template-columns: 0.88fr 1.12fr;
+        gap: 18px;
+      }
+
+      .surface {
+        border-radius: var(--radius-xl);
+        padding: 20px;
+      }
+
+      .surface-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+
+      .surface-tag {
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(29, 26, 22, 0.06);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .menu-shell {
+        width: 320px;
+        max-width: 100%;
+        border-radius: 22px;
+        background: var(--panel-strong);
+        border: 1px solid var(--line);
+        overflow: hidden;
+      }
+
+      .menu-header,
+      .settings-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .menu-items {
+        display: grid;
+        gap: 10px;
+        padding: 16px;
+      }
+
+      .menu-item {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        padding: 14px;
+        border-radius: 14px;
+        background: rgba(244, 239, 229, 0.8);
+      }
+
+      .status-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--good);
+        box-shadow: 0 0 0 5px rgba(31, 122, 76, 0.14);
+      }
+
+      .mini-note {
+        margin-top: 14px;
+        padding: 14px;
+        border-radius: 14px;
+        background: rgba(204, 90, 31, 0.08);
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .settings-shell {
+        display: grid;
+        grid-template-columns: 180px 1fr;
+        min-height: 420px;
+        border-radius: 24px;
+        overflow: hidden;
+        background: var(--panel-strong);
+        border: 1px solid var(--line);
+      }
+
+      .settings-nav {
+        padding: 18px;
+        border-right: 1px solid var(--line);
+        background: rgba(237, 229, 214, 0.72);
+      }
+
+      .settings-nav .nav-item {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        border: none;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+      }
+
+      .settings-nav .nav-item.active {
+        background: rgba(255, 255, 255, 0.75);
+      }
+
+      .settings-pane {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+
+      .settings-body {
+        padding: 18px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .setting-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 18px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: rgba(244, 239, 229, 0.72);
+      }
+
+      .pill,
+      .ghost-pill,
+      .state-chip,
+      .timeline-badge {
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-size: 13px;
+        border: 1px solid transparent;
+      }
+
+      .pill {
+        background: var(--ink);
+        color: white;
+      }
+
+      .ghost-pill {
+        background: rgba(29, 26, 22, 0.06);
+        color: var(--ink);
+      }
+
+      .prototype-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 18px;
+      }
+
+      .desktop {
+        position: relative;
+        min-height: 560px;
+        border-radius: 34px;
+        overflow: hidden;
+        background:
+          linear-gradient(135deg, rgba(20, 53, 76, 0.9), rgba(17, 32, 42, 0.94)),
+          radial-gradient(circle at top right, rgba(231, 145, 51, 0.28), transparent 30%);
+      }
+
+      .desktop::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.12), transparent 12%),
+          radial-gradient(circle at 82% 26%, rgba(255, 255, 255, 0.1), transparent 18%);
+      }
+
+      .desktop-bar {
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 34px;
+        padding: 0 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.78);
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(16px);
+      }
+
+      .fake-window {
+        position: absolute;
+        left: 38px;
+        right: 38px;
+        top: 72px;
+        bottom: 84px;
+        border-radius: 26px;
+        background: rgba(247, 241, 231, 0.9);
+        overflow: hidden;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      }
+
+      .fake-window-header {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 16px;
+        border-bottom: 1px solid rgba(29, 26, 22, 0.08);
+      }
+
+      .fake-lights {
+        display: flex;
+        gap: 7px;
+      }
+
+      .fake-lights span {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: rgba(29, 26, 22, 0.2);
+      }
+
+      .fake-editor {
+        padding: 26px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .line {
+        height: 12px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(29, 26, 22, 0.12), rgba(29, 26, 22, 0.04));
+      }
+
+      .line.short {
+        width: 38%;
+      }
+
+      .line.medium {
+        width: 62%;
+      }
+
+      .note-card {
+        position: absolute;
+        right: 56px;
+        top: 116px;
+        width: 240px;
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(244, 234, 188, 0.92);
+        transform: rotate(4deg);
+      }
+
+      .hud {
+        position: absolute;
+        left: 50%;
+        bottom: 28px;
+        transform: translateX(-50%);
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 240px;
+        max-width: 70%;
+        padding: 14px 16px;
+        border-radius: 22px;
+        background: rgba(17, 16, 15, 0.88);
+        color: #fff9f1;
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.34);
+        backdrop-filter: blur(22px);
+        transition: all 220ms ease;
+      }
+
+      .hud.is-hidden {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px) scale(0.96);
+      }
+
+      .hud-badge {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 0 8px rgba(204, 90, 31, 0.16);
+        flex: none;
+      }
+
+      .hud.is-listening .hud-badge {
+        animation: pulse 1.2s infinite;
+      }
+
+      .hud.is-done .hud-badge {
+        background: var(--good);
+        box-shadow: 0 0 0 8px rgba(31, 122, 76, 0.14);
+      }
+
+      .hud.is-error .hud-badge,
+      .hud.is-fallback .hud-badge {
+        background: var(--bad);
+        box-shadow: 0 0 0 8px rgba(181, 52, 45, 0.14);
+      }
+
+      .hud-title {
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .hud-subtitle {
+        margin-top: 4px;
+        color: rgba(255, 249, 241, 0.72);
+        font-size: 12px;
+      }
+
+      .hud-meta {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .timeline-panel,
+      .states-panel {
+        display: grid;
+        gap: 14px;
+      }
+
+      .timeline-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .state-chip {
+        background: rgba(255, 255, 255, 0.58);
+        border-color: rgba(29, 26, 22, 0.1);
+        color: var(--ink);
+        cursor: pointer;
+        transition: transform 160ms ease, background 160ms ease;
+      }
+
+      .state-chip:hover {
+        transform: translateY(-1px);
+      }
+
+      .state-chip.active {
+        background: var(--ink);
+        color: white;
+      }
+
+      .timeline-card,
+      .state-card {
+        border-radius: var(--radius-lg);
+        padding: 18px;
+      }
+
+      .timeline-card {
+        background: rgba(255, 251, 244, 0.78);
+        border: 1px solid var(--line);
+      }
+
+      .timeline-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(29, 26, 22, 0.08);
+      }
+
+      .timeline-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .timeline-badge {
+        background: rgba(204, 90, 31, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .state-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .state-card {
+        display: grid;
+        gap: 12px;
+      }
+
+      .state-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .token {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: var(--muted);
+        background: rgba(29, 26, 22, 0.06);
+      }
+
+      .token.good {
+        color: var(--good);
+        background: rgba(31, 122, 76, 0.1);
+      }
+
+      .token.warn {
+        color: var(--warn);
+        background: rgba(198, 107, 18, 0.12);
+      }
+
+      .token.bad {
+        color: var(--bad);
+        background: rgba(181, 52, 45, 0.1);
+      }
+
+      .state-card p {
+        line-height: 1.55;
+        color: var(--muted);
+      }
+
+      .footer-note {
+        margin-top: 18px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.52);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.12);
+          opacity: 0.86;
+        }
+      }
+
+      @media (max-width: 1100px) {
+        .hero,
+        .surface-grid,
+        .prototype-grid,
+        .state-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          width: min(100vw - 24px, 1320px);
+          padding-top: 24px;
+        }
+
+        .decision-row,
+        .setting-row,
+        .timeline-row {
+          grid-template-columns: 1fr;
+        }
+
+        .settings-shell {
+          grid-template-columns: 1fr;
+        }
+
+        .settings-nav {
+          border-right: none;
+          border-bottom: 1px solid var(--line);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <section class="hero">
+        <div class="hero-card">
+          <span class="eyebrow">tinyTypeless UI Prototype</span>
+          <h1>一条很窄，但必须很顺的语音输入界面</h1>
+          <p class="hero-copy">
+            这个原型只围绕 v1 黄金路径设计：打开应用后只有极轻的菜单栏面板和独立设置页；应用在后台时，
+            按下 <strong>Right Option</strong> 出现监听 HUD，抬起后 HUD 直接切到处理态，再快速淡出。
+          </p>
+        </div>
+        <div class="decision-card">
+          <span class="eyebrow">UI decisions</span>
+          <div class="decision-list">
+            <div class="decision-row">
+              <strong>打开时</strong>
+              <div>主面板只放状态和快捷入口，真正设置放到独立窗口，不把菜单栏面板做成控制中心。</div>
+            </div>
+            <div class="decision-row">
+              <strong>按下时</strong>
+              <div>弹出极小胶囊 HUD，不抢焦点，不显示复杂配置，只明确告诉用户“正在听”。</div>
+            </div>
+            <div class="decision-row">
+              <strong>抬起后</strong>
+              <div>同一个 HUD 原地形变为“处理中”，不要跳新窗口，不要二次确认，不要把结果展示成聊天气泡。</div>
+            </div>
+            <div class="decision-row">
+              <strong>失败时</strong>
+              <div>HUD 保留可操作信息，至少给“已复制 / 可重贴”的兜底，不让用户白说一遍。</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>1. 打开应用时的面板</h2>
+            <p>
+              建议只有两个前台形态：菜单栏弹出面板和独立设置窗口。菜单栏面板给状态和跳转，设置不要堆在
+              HUD 里，也不要塞进主流程。
+            </p>
+          </div>
+        </div>
+
+        <div class="surface-grid">
+          <div class="surface">
+            <div class="surface-title">
+              <h3>Menubar Quick Panel</h3>
+              <span class="surface-tag">轻状态面板</span>
+            </div>
+
+            <div class="menu-shell">
+              <div class="menu-header">
+                <strong>tinyTypeless</strong>
+                <div class="status-dot" aria-hidden="true"></div>
+              </div>
+              <div class="menu-items">
+                <div class="menu-item">
+                  <div>
+                    <strong>Ready</strong>
+                    <div style="margin-top: 4px; color: var(--muted); font-size: 13px;">
+                      Right Option 触发，后台常驻
+                    </div>
+                  </div>
+                  <span class="ghost-pill">在线</span>
+                </div>
+                <div class="menu-item">
+                  <div>
+                    <strong>Permissions</strong>
+                    <div style="margin-top: 4px; color: var(--muted); font-size: 13px;">
+                      麦克风 / Accessibility
+                    </div>
+                  </div>
+                  <span class="ghost-pill">已授权</span>
+                </div>
+                <div class="menu-item">
+                  <div>
+                    <strong>Microphone</strong>
+                    <div style="margin-top: 4px; color: var(--muted); font-size: 13px;">
+                      MacBook Pro 麦克风
+                    </div>
+                  </div>
+                  <span class="ghost-pill">默认</span>
+                </div>
+                <div class="menu-item">
+                  <div>
+                    <strong>Trigger</strong>
+                    <div style="margin-top: 4px; color: var(--muted); font-size: 13px;">
+                      开发期键位
+                    </div>
+                  </div>
+                  <span class="pill">Right Option</span>
+                </div>
+                <div class="menu-item">
+                  <div>
+                    <strong>Settings</strong>
+                    <div style="margin-top: 4px; color: var(--muted); font-size: 13px;">
+                      打开完整设置窗口
+                    </div>
+                  </div>
+                  <span class="pill">Open</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini-note">
+              这里不要放太多切换项。它是“状态入口”，不是完整控制台。真正需要编辑的配置，统一放到设置窗口。
+            </div>
+          </div>
+
+          <div class="surface">
+            <div class="surface-title">
+              <h3>Settings Window</h3>
+              <span class="surface-tag">完整配置窗口</span>
+            </div>
+
+            <div class="settings-shell">
+              <div class="settings-nav">
+                <button class="nav-item active">General</button>
+                <button class="nav-item">Audio</button>
+                <button class="nav-item">Permissions</button>
+                <button class="nav-item">Diagnostics</button>
+              </div>
+              <div class="settings-pane">
+                <div class="settings-header">
+                  <strong>General</strong>
+                  <span class="ghost-pill">v1 最小设置</span>
+                </div>
+                <div class="settings-body">
+                  <div class="setting-row">
+                    <div>
+                      <strong>Trigger Key</strong>
+                      <div style="margin-top: 4px; color: var(--muted);">
+                        先用 Right Option，后续切回 Fn
+                      </div>
+                    </div>
+                    <span class="pill">Right Option</span>
+                  </div>
+                  <div class="setting-row">
+                    <div>
+                      <strong>Clean-up</strong>
+                      <div style="margin-top: 4px; color: var(--muted);">
+                        去口头禅、去重复、补基本标点
+                      </div>
+                    </div>
+                    <span class="pill">Enabled</span>
+                  </div>
+                  <div class="setting-row">
+                    <div>
+                      <strong>Paste Fallback</strong>
+                      <div style="margin-top: 4px; color: var(--muted);">
+                        AX 失败时允许剪贴板回退
+                      </div>
+                    </div>
+                    <span class="ghost-pill">On</span>
+                  </div>
+                  <div class="setting-row">
+                    <div>
+                      <strong>HUD</strong>
+                      <div style="margin-top: 4px; color: var(--muted);">
+                        后台工作时显示最小状态胶囊
+                      </div>
+                    </div>
+                    <span class="ghost-pill">Visible</span>
+                  </div>
+                </div>
+                <div class="settings-header">
+                  <span style="color: var(--muted);">状态类信息在菜单栏面板里看；改配置来这里做。</span>
+                  <span class="pill">Save</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>2. 应用在后台时，按下和抬起怎么显示</h2>
+            <p>
+              推荐用同一个 HUD 做状态迁移。按下时出现“Listening”，抬起时直接切为“Processing”，成功后短暂确认并淡出。
+              下方按钮可以切换不同状态。
+            </p>
+          </div>
+        </div>
+
+        <div class="prototype-grid">
+          <div class="desktop">
+            <div class="desktop-bar">
+              <span>Mon 10:27</span>
+              <span>tinyTypeless · background</span>
+            </div>
+
+            <div class="fake-window">
+              <div class="fake-window-header">
+                <div class="fake-lights">
+                  <span style="background: #ff5f57;"></span>
+                  <span style="background: #febc2e;"></span>
+                  <span style="background: #28c840;"></span>
+                </div>
+                <strong style="font-size: 13px; color: var(--muted);">Slack / message input</strong>
+              </div>
+              <div class="fake-editor">
+                <div class="line medium"></div>
+                <div class="line"></div>
+                <div class="line medium"></div>
+                <div class="line short"></div>
+                <div class="line"></div>
+                <div class="line short"></div>
+              </div>
+            </div>
+
+            <div class="note-card">
+              <strong>为什么这样放 HUD</strong>
+              <p style="margin-top: 8px; color: rgba(29, 26, 22, 0.72); line-height: 1.45;">
+                固定在底部中央更稳，不依赖光标位置，也不会在不同 app 里跳来跳去。
+              </p>
+            </div>
+
+            <div class="hud is-hidden" id="hud">
+              <div class="hud-badge"></div>
+              <div>
+                <div class="hud-title" id="hud-title">Idle</div>
+                <div class="hud-subtitle" id="hud-subtitle">HUD hidden in background</div>
+              </div>
+              <div class="hud-meta">
+                <span class="ghost-pill" id="hud-pill">Hidden</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-panel">
+            <div class="timeline-card">
+              <h3>状态切换</h3>
+              <div class="timeline-controls" id="state-controls">
+                <button class="state-chip active" data-state="idle">Idle</button>
+                <button class="state-chip" data-state="listening">Press Down</button>
+                <button class="state-chip" data-state="processing">Release</button>
+                <button class="state-chip" data-state="cleanup">Clean-up</button>
+                <button class="state-chip" data-state="inserting">Inserting</button>
+                <button class="state-chip" data-state="done">Success</button>
+                <button class="state-chip" data-state="fallback">Fallback</button>
+                <button class="state-chip" data-state="error">Error</button>
+              </div>
+            </div>
+
+            <div class="timeline-card">
+              <h3>推荐节奏</h3>
+              <div class="timeline-row">
+                <span class="timeline-badge">1</span>
+                <div>
+                  <strong>按下</strong>
+                  <p>HUD 在 100ms 内出现，只说一件事：“正在听”。不要显示设置、日志、模型信息。</p>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <span class="timeline-badge">2</span>
+                <div>
+                  <strong>抬起</strong>
+                  <p>同一胶囊切到处理中，用户不用猜系统有没有收到结束信号。</p>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <span class="timeline-badge">3</span>
+                <div>
+                  <strong>成功</strong>
+                  <p>显示 Done 约 400 到 700ms 后淡出。不要再弹结果预览窗口。</p>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <span class="timeline-badge">4</span>
+                <div>
+                  <strong>失败</strong>
+                  <p>保留明确的 fallback 语义，例如“已复制，可手动粘贴”或“插入失败”。</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-note">
+              当前建议是：<strong>后台不显示任何常驻悬浮条</strong>。只有在按下触发键之后才出现 HUD。
+              这比一直挂着一个浮窗更干净，也更像输入层而不是工作台。
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>3. 各个状态</h2>
+            <p>
+              v1 只需要很少的视觉状态。状态一定少，但每个状态都要让用户明确知道系统在做什么，以及失败时还能不能补救。
+            </p>
+          </div>
+        </div>
+
+        <div class="state-grid">
+          <div class="state-card">
+            <h3>Idle / Hidden</h3>
+            <div class="state-meta">
+              <span class="token">后台静默</span>
+              <span class="token good">最轻</span>
+            </div>
+            <p>默认没有悬浮条，没有主窗。只有菜单栏图标和常驻后台进程。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>Recording</h3>
+            <div class="state-meta">
+              <span class="token">按下触发键</span>
+              <span class="token good">立即反馈</span>
+            </div>
+            <p>小胶囊出现，标识 Listening。可以带一个轻微呼吸感，但不要做花哨波形。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>ASR Processing</h3>
+            <div class="state-meta">
+              <span class="token">松键后</span>
+              <span class="token warn">等待网络</span>
+            </div>
+            <p>胶囊原地切 Processing。不要换位置，不要闪烁，不要弹新面板。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>Clean-up</h3>
+            <div class="state-meta">
+              <span class="token">文本整理</span>
+              <span class="token warn">极短暂</span>
+            </div>
+            <p>视觉上可以继续沿用 Processing，不需要单独一个重状态，只要内部能分阶段就行。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>Inserting</h3>
+            <div class="state-meta">
+              <span class="token">AX / paste</span>
+              <span class="token warn">看不见更好</span>
+            </div>
+            <p>这个状态一般不必额外强调。对用户来说，理想体验是“字已经进去了”。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>Success</h3>
+            <div class="state-meta">
+              <span class="token">Done</span>
+              <span class="token good">快速淡出</span>
+            </div>
+            <p>显示短暂成功确认即可，不要停留太久，不要让它挡住继续输入。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>Fallback</h3>
+            <div class="state-meta">
+              <span class="token">AX 失败</span>
+              <span class="token bad">仍要可用</span>
+            </div>
+            <p>如果走剪贴板回退，应明确告诉用户结果已经可粘贴，避免“看似成功其实没进去”。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>Error</h3>
+            <div class="state-meta">
+              <span class="token">网络 / 权限</span>
+              <span class="token bad">明确报错</span>
+            </div>
+            <p>错误文案要短，下一步动作要清楚，例如“麦克风未授权”或“网络失败，请重试”。</p>
+          </div>
+
+          <div class="state-card">
+            <h3>Permission</h3>
+            <div class="state-meta">
+              <span class="token">首次安装</span>
+              <span class="token warn">非主路径</span>
+            </div>
+            <p>权限引导不要混进 HUD。建议通过菜单栏入口或独立设置页提示，避免污染日常使用路径。</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const states = {
+        idle: {
+          title: "Idle",
+          subtitle: "HUD hidden in background",
+          pill: "Hidden",
+          classes: ["is-hidden"]
+        },
+        listening: {
+          title: "Listening",
+          subtitle: "按住 Right Option 讲话",
+          pill: "Mic On",
+          classes: ["is-listening"]
+        },
+        processing: {
+          title: "Processing",
+          subtitle: "已收到结束信号，正在做语音识别",
+          pill: "ASR",
+          classes: []
+        },
+        cleanup: {
+          title: "Polishing",
+          subtitle: "正在清理口头禅、重复和标点",
+          pill: "Clean-up",
+          classes: []
+        },
+        inserting: {
+          title: "Inserting",
+          subtitle: "正在写入当前输入框",
+          pill: "AX Insert",
+          classes: []
+        },
+        done: {
+          title: "Done",
+          subtitle: "文本已经进入当前输入框",
+          pill: "Success",
+          classes: ["is-done"]
+        },
+        fallback: {
+          title: "Copied as fallback",
+          subtitle: "插入失败，结果已进入剪贴板",
+          pill: "Fallback",
+          classes: ["is-fallback"]
+        },
+        error: {
+          title: "Mic or network error",
+          subtitle: "这次没有成功，需要用户重试",
+          pill: "Error",
+          classes: ["is-error"]
+        }
+      };
+
+      const hud = document.getElementById("hud");
+      const hudTitle = document.getElementById("hud-title");
+      const hudSubtitle = document.getElementById("hud-subtitle");
+      const hudPill = document.getElementById("hud-pill");
+      const buttons = [...document.querySelectorAll(".state-chip")];
+
+      function setState(name) {
+        const state = states[name];
+        hud.className = "hud";
+        state.classes.forEach((cls) => hud.classList.add(cls));
+        hudTitle.textContent = state.title;
+        hudSubtitle.textContent = state.subtitle;
+        hudPill.textContent = state.pill;
+        buttons.forEach((button) => {
+          button.classList.toggle("active", button.dataset.state === name);
+        });
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => setState(button.dataset.state));
+      });
+
+      setState("idle");
+    </script>
+  </body>
+</html>

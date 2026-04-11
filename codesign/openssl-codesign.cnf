@@ -1,0 +1,17 @@
+[ req ]
+default_bits = 2048
+distinguished_name = dn
+x509_extensions = ext
+prompt = no
+
+[ dn ]
+CN = tinyTypeless Local Development
+O = tinyTypeless
+OU = Local Development
+
+[ ext ]
+basicConstraints = critical,CA:false
+keyUsage = critical,digitalSignature
+extendedKeyUsage = codeSigning
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always
