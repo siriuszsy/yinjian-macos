@@ -1,6 +1,10 @@
-# 音键
+<p align="center">
+  <img src="./docs/assets/yinjian-logo.svg" width="160" alt="音键 APP logo" />
+</p>
 
-`音键` 是一个 macOS 语音输入工具。
+<h1 align="center">音键 APP</h1>
+
+<p align="center">一个面向 macOS 的语音输入工具。</p>
 
 目标很简单：
 

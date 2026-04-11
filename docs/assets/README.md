@@ -9,6 +9,7 @@
 - `thinking-state.png`
 - `typing-result.png`
 - `demo-short.gif`
+- `yinjian-logo.svg`
 
 建议：
 
