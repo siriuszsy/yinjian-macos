@@ -101,6 +101,21 @@ API Key 不会写进仓库。
 - 降低辅助功能权限漂移
 - 方便重复构建后的本地测试
 
+如果你已经加入 Apple Developer Program，推荐优先使用苹果正式签名链路，而不是继续依赖仓库里的本地自签名证书。
+
+最稳的本地开发做法是：
+
+- 在 `Xcode > Settings > Accounts` 里添加你的 Apple 账号
+- 让 Xcode 为这台机器创建或下载 `Apple Development` 证书
+- 将你的 `Team ID` 写入本地文件 `tinyTypeless/Support/Signing.local.xcconfig`
+- 保持 `Bundle Identifier` 稳定
+- 保持 `.app` 安装路径稳定
+
+注意：
+
+- `Apple Developer` App 本身不负责给 Xcode 安装本地签名证书
+- 真正影响本地签名和 provisioning 的仍然是 `Xcode > Settings > Accounts`
+
 如果你只是本地开发，Xcode 自带的本地运行签名通常就够了。  
 如果你需要更稳定地处理辅助功能权限，建议：
 
@@ -115,6 +130,8 @@ API Key 不会写进仓库。
 如果你确实要自己处理本地签名，先看：
 
 - [Vibe Coding 开发说明](./vibe-coding-guide.md)
+
+当前安装脚本会优先尝试使用 `login.keychain-db` 里的 `Apple Development` 身份；如果这台机器还没有苹果正式证书，才会回退到仓库原有的本地开发签名脚本。
 
 ## 6. 界面预览素材建议
 

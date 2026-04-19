@@ -1,12 +1,19 @@
 import AppKit
+import OSLog
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var environment: AppEnvironment?
     private var menuBarController: MenuBarController?
     private let bootstrap = AppBootstrap()
+    private let isRunningTests = ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
+    private let logger = Logger(subsystem: BuildInfo.bundleIdentifier, category: "App")
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if isRunningTests {
+            return
+        }
+
         if terminateIfDuplicateInstance() {
             return
         }
@@ -24,11 +31,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                     try await environment.orchestrator.start()
                     self.menuBarController?.openSettings()
                 } catch {
-                    environment.hudController.render(.idle)
+                    let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+                    self.logger.error("Failed to start orchestrator: \(message, privacy: .public)")
+                    environment.hudController.render(.error(message: "启动失败：\(message)"))
                     self.menuBarController?.openSettings()
                 }
             }
         } catch {
+            logger.error("Failed to bootstrap app: \(error.localizedDescription, privacy: .public)")
             assertionFailure("Failed to bootstrap app: \(error)")
         }
     }
@@ -47,7 +57,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             return false
         }
 
-        existingInstance.activate(options: [.activateIgnoringOtherApps])
+        existingInstance.activate()
         NSApp.terminate(nil)
         return true
     }

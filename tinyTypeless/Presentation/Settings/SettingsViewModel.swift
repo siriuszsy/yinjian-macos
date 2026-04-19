@@ -68,14 +68,24 @@ final class SettingsViewModel: ObservableObject {
     }
 
     var asrModelDisplayName: String {
-        "通义语音识别"
+        "通义语音识别（\(settings.asrMode.displayName)）"
     }
 
     var cleanupModelDisplayName: String {
-        "通义文本整理"
+        settings.cleanupModel
     }
 
     func save() {
+        let normalizedSourceLanguage = normalizedTranslationSourceLanguage(settings.translationSourceLanguage)
+        let normalizedTargetLanguage = normalizedTranslationTargetLanguage(settings.translationTargetLanguage)
+        guard normalizedTargetLanguage.caseInsensitiveCompare("auto") != .orderedSame else {
+            saveMessage = "翻译目标语言不能设为 auto。"
+            return
+        }
+
+        settings.cleanupModel = normalizedCleanupModel(settings.cleanupModel)
+        settings.translationSourceLanguage = normalizedSourceLanguage
+        settings.translationTargetLanguage = normalizedTargetLanguage
         try? settingsStore.save(settings)
         saveMessage = "设置已保存"
     }
@@ -158,10 +168,10 @@ final class SettingsViewModel: ObservableObject {
         }
 
         if settings.triggerKey.requiresInputMonitoring {
-            return "当前触发键需要键盘监听权限。完成授权后回到这个窗口会自动刷新；如果热键还是没反应，请退出并重新打开 tinyTypeless。"
+            return "当前触发键需要键盘监听权限。完成授权后回到这个窗口会自动刷新；如果热键还是没反应，请退出并重新打开音键。"
         }
 
-        return "当前开发版触发键不需要键盘监听。录音靠麦克风权限，跨应用写回靠辅助功能权限。"
+        return "当前开发版的听写键和翻译键都不依赖键盘监听。录音靠麦克风权限，跨应用写回靠辅助功能权限。"
     }
 
     var permissionOverviewTitle: String {
@@ -172,7 +182,7 @@ final class SettingsViewModel: ObservableObject {
         var lines = [
             "1. 麦克风：录音必须要开。",
             "2. 辅助功能：把转写结果写回到别的应用输入框，必须要开。",
-            "3. 键盘监听：只有以后切回右侧 ⌥ / Fn 这种全局单键触发时才需要。当前开发版用 ⌘ + ;，不依赖它。"
+            "3. 键盘监听：只有右侧 ⌥ / Fn 这种全局单键触发才依赖它。当前默认的 `⌘ + ;` 和翻译快捷键都不依赖。"
         ]
 
         lines.append("Typeless 大概率也不是单纯靠 Cmd+V。更像是“辅助功能直写为主，剪贴板/粘贴只做回退”。")
@@ -193,5 +203,20 @@ final class SettingsViewModel: ObservableObject {
         } else {
             setupMessage = "没能直接打开系统设置，请手动进入“系统设置 > 隐私与安全性”。"
         }
+    }
+
+    private func normalizedCleanupModel(_ value: String) -> String {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? AppSettings.default.cleanupModel : trimmed
+    }
+
+    private func normalizedTranslationSourceLanguage(_ value: String) -> String {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? AppSettings.default.translationSourceLanguage : trimmed
+    }
+
+    private func normalizedTranslationTargetLanguage(_ value: String) -> String {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? AppSettings.default.translationTargetLanguage : trimmed
     }
 }

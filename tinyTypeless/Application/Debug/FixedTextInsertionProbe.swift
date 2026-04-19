@@ -23,9 +23,7 @@ final class FixedTextInsertionProbe {
 
     func run() {
         cancelAutoDismiss()
-
-        let startedAt = clock.now()
-        let probeText = "【tinyTypeless 写入测试】"
+        let probeText = "【音键写入测试】"
 
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -33,9 +31,7 @@ final class FixedTextInsertionProbe {
             do {
                 let context = try self.contextInspector.currentContext()
                 self.hudController.render(.processing(stage: .insertingText))
-                let insertionStartedAt = self.clock.now()
                 let result = try self.textInserter.insert(probeText, into: context)
-                let endedAt = self.clock.now()
 
                 if result.success {
                     let message = result.usedFallback ? "已走回退写入测试" : "已直接写入测试文本"

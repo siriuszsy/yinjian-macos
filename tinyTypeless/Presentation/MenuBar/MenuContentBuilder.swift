@@ -9,19 +9,27 @@ struct MenuContentBuilder {
     func buildMenu(
         settings: AppSettings,
         settingsTarget: ClosureMenuAction,
-        debugItems: [MenuDebugItem]
+        insertionProbeTarget: ClosureMenuAction
     ) -> NSMenu {
         let menu = NSMenu()
 
-        let titleItem = NSMenuItem(title: BuildInfo.appName, action: nil, keyEquivalent: "")
+        let titleItem = NSMenuItem(title: BuildInfo.displayName, action: nil, keyEquivalent: "")
         titleItem.isEnabled = false
         menu.addItem(titleItem)
+        let subtitleItem = NSMenuItem(title: "按住说话，松开落字", action: nil, keyEquivalent: "")
+        subtitleItem.isEnabled = false
+        menu.addItem(subtitleItem)
         menu.addItem(.separator())
 
-        let settingsItem = NSMenuItem(title: "设置", action: nil, keyEquivalent: ",")
+        let settingsItem = NSMenuItem(title: "打开设置", action: nil, keyEquivalent: ",")
         settingsItem.target = settingsTarget
         settingsItem.action = #selector(ClosureMenuAction.invoke)
         menu.addItem(settingsItem)
+
+        let insertionProbeItem = NSMenuItem(title: "写入测试文本", action: nil, keyEquivalent: "")
+        insertionProbeItem.target = insertionProbeTarget
+        insertionProbeItem.action = #selector(ClosureMenuAction.invoke)
+        menu.addItem(insertionProbeItem)
 
         let triggerItem = NSMenuItem(
             title: "触发键：\(settings.triggerKey.displayName)",
@@ -31,32 +39,17 @@ struct MenuContentBuilder {
         triggerItem.isEnabled = false
         menu.addItem(triggerItem)
 
-        let runtimeItem = NSMenuItem(
-            title: "运行态：悬浮球预览",
+        let modeItem = NSMenuItem(
+            title: "识别模式：\(settings.asrMode.displayName)",
             action: nil,
             keyEquivalent: ""
         )
-        runtimeItem.isEnabled = false
-        menu.addItem(runtimeItem)
-
-        if !debugItems.isEmpty {
-            menu.addItem(.separator())
-
-            let debugHeader = NSMenuItem(title: "调试悬浮球", action: nil, keyEquivalent: "")
-            debugHeader.isEnabled = false
-            menu.addItem(debugHeader)
-
-            for item in debugItems {
-                let menuItem = NSMenuItem(title: item.title, action: nil, keyEquivalent: "")
-                menuItem.target = item.actionTarget
-                menuItem.action = #selector(ClosureMenuAction.invoke)
-                menu.addItem(menuItem)
-            }
-        }
+        modeItem.isEnabled = false
+        menu.addItem(modeItem)
 
         menu.addItem(.separator())
 
-        let quitItem = NSMenuItem(title: "退出 \(BuildInfo.appName)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: "退出 \(BuildInfo.displayName)", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         menu.addItem(quitItem)
 
         return menu

@@ -7,6 +7,7 @@ enum DictationError: Error, LocalizedError, Sendable {
     case accessibilityPermissionDenied
     case recordingFailed(String)
     case asrFailed(String)
+    case translationFailed(String)
     case cleanupFailed(String)
     case insertionFailed(String)
 
@@ -24,6 +25,8 @@ enum DictationError: Error, LocalizedError, Sendable {
             return "录音失败：\(message)"
         case .asrFailed(let message):
             return "语音转文字失败：\(message)"
+        case .translationFailed(let message):
+            return "翻译失败：\(message)"
         case .cleanupFailed(let message):
             return "文本整理失败：\(message)"
         case .insertionFailed(let message):

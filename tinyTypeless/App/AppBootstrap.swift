@@ -3,7 +3,7 @@ import Foundation
 @MainActor
 final class AppBootstrap {
     func buildEnvironment() throws -> AppEnvironment {
-        let paths = FileSystemPaths(appName: BuildInfo.appName)
+        let paths = FileSystemPaths(appName: BuildInfo.storageName)
         let settingsStore = JSONSettingsStore(paths: paths)
         var settings = (try? settingsStore.load()) ?? .default
         if settings.triggerKey.requiresInputMonitoring {
@@ -14,7 +14,10 @@ final class AppBootstrap {
             settings.cleanupEnabled = true
             try? settingsStore.save(settings)
         }
-        let apiKeyStore = FileAPIKeyStore(fileURL: paths.apiKeyFallbackURL)
+        let apiKeyStore = ResilientAPIKeyStore(
+            primary: KeychainAPIKeyStore(service: BuildInfo.bundleIdentifier),
+            fallback: FileAPIKeyStore(fileURL: paths.apiKeyFallbackURL)
+        )
         let permissionService = SystemPermissionService()
         let sessionLogStore = JSONLSessionLogStore(paths: paths)
         let httpClient = URLSessionHTTPClient()
@@ -30,10 +33,21 @@ final class AppBootstrap {
             fallback: PasteboardFallbackInserter(executor: SyntheticPasteExecutor())
         )
         let promptBuilder = CleanupPromptBuilder()
-        let asrService = AliyunASRService(httpClient: httpClient, apiKeyStore: apiKeyStore)
+        let offlineASRService = AliyunASRService(httpClient: httpClient, apiKeyStore: apiKeyStore)
+        let realtimeASRService = AliyunRealtimeASRService(apiKeyStore: apiKeyStore)
+        let asrService = SelectableASRService(
+            settingsStore: settingsStore,
+            offlineService: offlineASRService,
+            realtimeService: realtimeASRService
+        )
+        let translationService = AliyunTranslationService(
+            httpClient: httpClient,
+            apiKeyStore: apiKeyStore
+        )
         let cleanupService = AliyunCleanupService(
             httpClient: httpClient,
             apiKeyStore: apiKeyStore,
+            settingsStore: settingsStore,
             promptBuilder: promptBuilder
         )
         let hudController = AppKitStatusHUDController()
@@ -43,6 +57,7 @@ final class AppBootstrap {
             triggerEngine: triggerEngine,
             recordingEngine: recordingEngine,
             asrService: asrService,
+            translationService: translationService,
             cleanupService: cleanupService,
             contextInspector: contextInspector,
             textInserter: textInserter,
@@ -68,6 +83,7 @@ final class AppBootstrap {
         )
 
         recordingEngine.levelObserver = orchestrator
+        recordingEngine.chunkObserver = orchestrator
         triggerEngine.delegate = orchestrator
 
         return AppEnvironment(
@@ -86,5 +102,72 @@ final class AppBootstrap {
             runtimePreviewCoordinator: runtimePreviewCoordinator,
             fixedTextInsertionProbe: fixedTextInsertionProbe
         )
+    }
+}
+
+private final class SelectableASRService: ASRService, @unchecked Sendable {
+    private let settingsStore: SettingsStore
+    private let offlineService: ASRService
+    private let realtimeService: ASRService
+
+    init(
+        settingsStore: SettingsStore,
+        offlineService: ASRService,
+        realtimeService: ASRService
+    ) {
+        self.settingsStore = settingsStore
+        self.offlineService = offlineService
+        self.realtimeService = realtimeService
+    }
+
+    func transcribe(_ payload: AudioPayload) async throws -> ASRTranscript {
+        let asrMode = currentASRMode()
+        switch asrMode {
+        case .offline:
+            return try await offlineService.transcribe(payload)
+        case .realtime:
+            return try await realtimeService.transcribe(payload)
+        }
+    }
+
+    private func currentASRMode() -> ASRMode {
+        (try? settingsStore.load().asrMode) ?? .offline
+    }
+}
+
+extension SelectableASRService: LiveStreamingASRService {
+    func beginLiveTranscription(languageCode: String?) async throws -> Bool {
+        guard currentASRMode() == .realtime,
+              let liveService = realtimeService as? any LiveStreamingASRService else {
+            return false
+        }
+
+        return try await liveService.beginLiveTranscription(languageCode: languageCode)
+    }
+
+    func appendLiveAudioChunk(_ chunk: AudioChunk) async throws {
+        guard currentASRMode() == .realtime,
+              let liveService = realtimeService as? any LiveStreamingASRService else {
+            return
+        }
+
+        try await liveService.appendLiveAudioChunk(chunk)
+    }
+
+    func finishLiveTranscription() async throws -> ASRTranscript? {
+        guard currentASRMode() == .realtime,
+              let liveService = realtimeService as? any LiveStreamingASRService else {
+            return nil
+        }
+
+        return try await liveService.finishLiveTranscription()
+    }
+
+    func cancelLiveTranscription() async {
+        guard let liveService = realtimeService as? any LiveStreamingASRService else {
+            return
+        }
+
+        await liveService.cancelLiveTranscription()
     }
 }

@@ -8,8 +8,8 @@ protocol TriggerEngine: AnyObject {
 }
 
 protocol TriggerEngineDelegate: AnyObject {
-    func triggerDidPressDown(at timestamp: TimeInterval)
-    func triggerDidRelease(at timestamp: TimeInterval)
+    func triggerDidPressDown(for intent: SessionIntent, at timestamp: TimeInterval)
+    func triggerDidRelease(for intent: SessionIntent, at timestamp: TimeInterval)
 }
 
 enum TriggerKey: String, Codable, Sendable {

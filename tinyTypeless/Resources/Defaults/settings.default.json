@@ -1,6 +1,8 @@
 {
   "triggerKey": "commandSemicolon",
   "microphoneDeviceID": "system-default",
+  "asrMode": "offline",
+  "cleanupModel": "qwen-flash",
   "cleanupEnabled": true,
   "showHUD": true,
   "fallbackPasteEnabled": true

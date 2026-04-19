@@ -5,6 +5,7 @@ enum DictationState: Sendable {
     case recording(startedAt: Date)
     case stopping
     case asrProcessing
+    case translationProcessing
     case cleanupProcessing
     case inserting
     case failed(message: String)

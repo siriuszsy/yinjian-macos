@@ -132,7 +132,11 @@ struct StatusHUD: View {
                 return 0
             case .transcribingAudio:
                 return 1
-            case .cleaningTranscript, .insertingText:
+            case .translatingText:
+                return 2
+            case .cleaningTranscript:
+                return 1
+            case .insertingText:
                 return 2
             }
         default:
@@ -150,8 +154,13 @@ struct StatusHUD: View {
         switch viewModel.state {
         case .idle:
             return "待命"
-        case .listening:
-            return "正在录音"
+        case .listening(let intent, _):
+            switch intent {
+            case .dictation:
+                return "正在录音"
+            case .translation:
+                return "翻译录音中"
+            }
         case .processing(let stage):
             return stage.title
         case .success:
@@ -169,8 +178,13 @@ struct StatusHUD: View {
         switch viewModel.state {
         case .idle:
             return "后台待命"
-        case .listening(let triggerKey):
-            return "按住\(triggerKey.displayName)说话，松开结束"
+        case .listening(let intent, let triggerLabel):
+            switch intent {
+            case .dictation:
+                return "按住\(triggerLabel)说话，松开结束"
+            case .translation:
+                return "按住\(triggerLabel)说话，松开后自动翻译"
+            }
         case .processing(let stage):
             return stage.subtitle
         case .success(let message):
@@ -188,8 +202,13 @@ struct StatusHUD: View {
         switch viewModel.state {
         case .idle:
             return nil
-        case .listening:
-            return nil
+        case .listening(let intent, _):
+            switch intent {
+            case .dictation:
+                return nil
+            case .translation:
+                return "翻译"
+            }
         case .processing(let stage):
             return stage.pill
         case .success:

@@ -3,6 +3,7 @@ import Foundation
 enum RuntimeIndicatorCallStage: String, Codable, Sendable {
     case finalizingCapture
     case transcribingAudio
+    case translatingText
     case cleaningTranscript
     case insertingText
 
@@ -16,6 +17,8 @@ enum RuntimeIndicatorCallStage: String, Codable, Sendable {
             return "正在收尾本次录音"
         case .transcribingAudio:
             return "正在把语音转成文字"
+        case .translatingText:
+            return "正在翻译文本"
         case .cleaningTranscript:
             return "正在整理转写结果"
         case .insertingText:
@@ -29,6 +32,8 @@ enum RuntimeIndicatorCallStage: String, Codable, Sendable {
             return "收尾"
         case .transcribingAudio:
             return "转写"
+        case .translatingText:
+            return "翻译"
         case .cleaningTranscript:
             return "整理"
         case .insertingText:
@@ -67,7 +72,7 @@ enum RuntimeIndicatorBlockedReason: String, Codable, Sendable {
 
 enum RuntimeIndicatorState: Equatable, Sendable {
     case idle
-    case listening(triggerKey: TriggerKey)
+    case listening(intent: SessionIntent, triggerLabel: String)
     case processing(stage: RuntimeIndicatorCallStage)
     case success(message: String)
     case fallback(message: String)

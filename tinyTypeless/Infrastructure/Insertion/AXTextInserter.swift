@@ -1,12 +1,16 @@
 import ApplicationServices
 import Foundation
+import OSLog
 
 final class AXTextInserter: TextInserter {
+    private let logger = Logger(subsystem: BuildInfo.bundleIdentifier, category: "Insertion")
+
     func insert(
         _ text: String,
         into context: FocusedContext
     ) throws -> InsertionResult {
         guard AXIsProcessTrusted() else {
+            logger.error("AX direct insert blocked: accessibility permission missing. targetApp=\(context.applicationName, privacy: .public)")
             return InsertionResult(
                 success: false,
                 usedFallback: false,
@@ -15,6 +19,7 @@ final class AXTextInserter: TextInserter {
         }
 
         guard let element = focusedElement(from: context) else {
+            logger.error("AX direct insert failed: no focused element. targetApp=\(context.applicationName, privacy: .public)")
             return InsertionResult(
                 success: false,
                 usedFallback: false,
@@ -31,6 +36,7 @@ final class AXTextInserter: TextInserter {
             expectedValue: expectedValue,
             in: element
            ) {
+            logger.notice("AX direct insert succeeded via value replacement. targetApp=\(context.applicationName, privacy: .public)")
             return InsertionResult(
                 success: true,
                 usedFallback: false,
@@ -49,6 +55,7 @@ final class AXTextInserter: TextInserter {
             expectedValue: nil,
             in: element
            ) {
+            logger.notice("AX direct insert succeeded via selected text replacement. targetApp=\(context.applicationName, privacy: .public)")
             return InsertionResult(
                 success: true,
                 usedFallback: false,
@@ -56,6 +63,7 @@ final class AXTextInserter: TextInserter {
             )
         }
 
+        logger.error("AX direct insert failed: unsupported input element. targetApp=\(context.applicationName, privacy: .public)")
         return InsertionResult(
             success: false,
             usedFallback: false,

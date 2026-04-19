@@ -1,7 +1,9 @@
 import AppKit
 import Foundation
+import OSLog
 
 final class PasteboardFallbackInserter: TextInserter {
+    private let logger = Logger(subsystem: BuildInfo.bundleIdentifier, category: "Insertion")
     private let executor: SyntheticPasteExecutor
 
     init(executor: SyntheticPasteExecutor) {
@@ -21,6 +23,7 @@ final class PasteboardFallbackInserter: TextInserter {
         do {
             guard activateTargetApplicationIfNeeded(context) else {
                 restorePasteboard(after: 0, previousString: previousString)
+                logger.error("Paste fallback failed: could not reactivate target app. targetApp=\(context.applicationName, privacy: .public)")
 
                 return InsertionResult(
                     success: false,
@@ -32,6 +35,7 @@ final class PasteboardFallbackInserter: TextInserter {
             refocusTargetElementIfPossible(context)
             try executor.executePasteShortcut()
             restorePasteboard(after: 0.25, previousString: previousString)
+            logger.notice("Paste fallback succeeded. targetApp=\(context.applicationName, privacy: .public)")
 
             return InsertionResult(
                 success: true,
@@ -40,6 +44,7 @@ final class PasteboardFallbackInserter: TextInserter {
             )
         } catch {
             restorePasteboard(after: 0, previousString: previousString)
+            logger.error("Paste fallback failed with error: \(error.localizedDescription, privacy: .public), targetApp=\(context.applicationName, privacy: .public)")
 
             return InsertionResult(
                 success: false,

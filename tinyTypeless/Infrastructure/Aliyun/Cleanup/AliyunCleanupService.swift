@@ -3,15 +3,18 @@ import Foundation
 final class AliyunCleanupService: CleanupService {
     private let httpClient: HTTPClient
     private let apiKeyStore: APIKeyStore
+    private let settingsStore: SettingsStore
     private let promptBuilder: CleanupPromptBuilder
 
     init(
         httpClient: HTTPClient,
         apiKeyStore: APIKeyStore,
+        settingsStore: SettingsStore,
         promptBuilder: CleanupPromptBuilder
     ) {
         self.httpClient = httpClient
         self.apiKeyStore = apiKeyStore
+        self.settingsStore = settingsStore
         self.promptBuilder = promptBuilder
     }
 
@@ -20,13 +23,16 @@ final class AliyunCleanupService: CleanupService {
         context: CleanupContext
     ) async throws -> CleanText {
         let apiKey = try loadAPIKey()
+        let model = currentCleanupModel()
         let profile = await classifyPromptProfile(
             transcript: transcript,
             context: context,
-            apiKey: apiKey
+            apiKey: apiKey,
+            model: model
         )
         let requestBody = try JSONEncoder().encode(
             CleanupRequest(
+                model: model,
                 systemPrompt: promptBuilder.systemPrompt(for: context, profile: profile),
                 userPrompt: promptBuilder.userPrompt(for: transcript, context: context, profile: profile)
             )
@@ -53,7 +59,8 @@ final class AliyunCleanupService: CleanupService {
     private func classifyPromptProfile(
         transcript: ASRTranscript,
         context: CleanupContext,
-        apiKey: String
+        apiKey: String,
+        model: String
     ) async -> CleanupPromptProfile {
         if let heuristicProfile = obviousProfile(for: transcript.rawText) {
             return heuristicProfile
@@ -62,6 +69,7 @@ final class AliyunCleanupService: CleanupService {
         do {
             let requestBody = try JSONEncoder().encode(
                 ClassificationRequest(
+                    model: model,
                     systemPrompt: promptBuilder.classifierSystemPrompt(for: context),
                     userPrompt: promptBuilder.classifierUserPrompt(for: transcript)
                 )
@@ -116,6 +124,12 @@ final class AliyunCleanupService: CleanupService {
         throw DictationError.cleanupFailed("请先在设置里配置百炼 API Key。")
     }
 
+    private func currentCleanupModel() -> String {
+        let configuredModel = try? settingsStore.load().cleanupModel
+        let trimmed = configuredModel?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return trimmed.isEmpty ? "qwen-flash" : trimmed
+    }
+
     private func errorMessage(from data: Data, statusCode: Int) -> String {
         if let decoded = try? JSONDecoder().decode(AliyunCleanupResponse.self, from: data),
            let message = decoded.error?.message,
@@ -130,6 +144,75 @@ final class AliyunCleanupService: CleanupService {
             return "百炼 API Key 无效，或当前账号没有整理模型调用权限。"
         default:
             return "整理模型请求失败，状态码 \(statusCode)。"
+        }
+    }
+}
+
+final class AliyunTranslationService: TranslationService, @unchecked Sendable {
+    private let httpClient: HTTPClient
+    private let apiKeyStore: APIKeyStore
+
+    init(httpClient: HTTPClient, apiKeyStore: APIKeyStore) {
+        self.httpClient = httpClient
+        self.apiKeyStore = apiKeyStore
+    }
+
+    func translate(_ text: String, options: TranslationOptions) async throws -> String {
+        let apiKey = try loadAPIKey()
+        let requestBody = try JSONEncoder().encode(
+            TranslationRequest(text: text, options: options)
+        )
+        let request = try AliyunRequestFactory.makeTranslationRequest(apiKey: apiKey, body: requestBody)
+        let (data, response) = try await httpClient.perform(request)
+
+        guard (200..<300).contains(response.statusCode) else {
+            throw DictationError.translationFailed(errorMessage(from: data, statusCode: response.statusCode))
+        }
+
+        let decoded = try JSONDecoder().decode(AliyunCleanupResponse.self, from: data)
+        if let apiError = decoded.error?.message, !apiError.isEmpty {
+            throw DictationError.translationFailed(apiError)
+        }
+
+        guard let translatedText = decoded.cleanedText, !translatedText.isEmpty else {
+            throw DictationError.translationFailed("翻译模型返回了空结果。")
+        }
+
+        return translatedText
+    }
+
+    private func loadAPIKey() throws -> String {
+        if let envValue = ProcessInfo.processInfo.environment["DASHSCOPE_API_KEY"]?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !envValue.isEmpty {
+            return envValue
+        }
+
+        do {
+            let storedValue = try apiKeyStore.load().trimmingCharacters(in: .whitespacesAndNewlines)
+            if !storedValue.isEmpty {
+                return storedValue
+            }
+        } catch {
+            // Fall through to a user-facing error below.
+        }
+
+        throw DictationError.translationFailed("请先在设置里配置百炼 API Key。")
+    }
+
+    private func errorMessage(from data: Data, statusCode: Int) -> String {
+        if let decoded = try? JSONDecoder().decode(AliyunCleanupResponse.self, from: data),
+           let message = decoded.error?.message,
+           !message.isEmpty {
+            return message
+        }
+
+        switch statusCode {
+        case 400:
+            return "翻译请求格式不正确。"
+        case 401, 403:
+            return "百炼 API Key 无效，或当前账号没有翻译模型调用权限。"
+        default:
+            return "翻译请求失败，状态码 \(statusCode)。"
         }
     }
 }
@@ -150,8 +233,8 @@ private extension AliyunCleanupService {
             case enableThinking = "enable_thinking"
         }
 
-        init(systemPrompt: String, userPrompt: String) {
-            self.model = "qwen3.5-flash"
+        init(model: String, systemPrompt: String, userPrompt: String) {
+            self.model = model
             self.messages = [
                 Message(role: "system", content: systemPrompt),
                 Message(role: "user", content: userPrompt)
@@ -177,8 +260,8 @@ private extension AliyunCleanupService {
             case enableThinking = "enable_thinking"
         }
 
-        init(systemPrompt: String, userPrompt: String) {
-            self.model = "qwen3.5-flash"
+        init(model: String, systemPrompt: String, userPrompt: String) {
+            self.model = model
             self.messages = [
                 Message(role: "system", content: systemPrompt),
                 Message(role: "user", content: userPrompt)
@@ -192,5 +275,48 @@ private extension AliyunCleanupService {
     struct Message: Encodable {
         let role: String
         let content: String
+    }
+}
+
+private extension AliyunTranslationService {
+    struct TranslationRequest: Encodable {
+        let model: String
+        let messages: [Message]
+        let stream: Bool
+        let translationOptions: TranslationOptionsPayload
+
+        enum CodingKeys: String, CodingKey {
+            case model
+            case messages
+            case stream
+            case translationOptions = "translation_options"
+        }
+
+        init(text: String, options: TranslationOptions) {
+            self.model = "qwen-mt-flash"
+            self.messages = [
+                Message(role: "user", content: text)
+            ]
+            self.stream = false
+            self.translationOptions = TranslationOptionsPayload(
+                sourceLanguage: options.sourceLanguage,
+                targetLanguage: options.targetLanguage
+            )
+        }
+    }
+
+    struct Message: Encodable {
+        let role: String
+        let content: String
+    }
+
+    struct TranslationOptionsPayload: Encodable {
+        let sourceLanguage: String
+        let targetLanguage: String
+
+        enum CodingKeys: String, CodingKey {
+            case sourceLanguage = "source_lang"
+            case targetLanguage = "target_lang"
+        }
     }
 }

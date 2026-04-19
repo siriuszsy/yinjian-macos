@@ -6,7 +6,7 @@ struct TinyTypelessApp: App {
 
     var body: some Scene {
         Settings {
-            Text("tinyTypeless 设置")
+            Text("\(BuildInfo.displayName) 设置")
                 .frame(width: 320, height: 200)
         }
     }

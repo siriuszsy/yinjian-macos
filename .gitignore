@@ -2,6 +2,7 @@
 .build
 DerivedData
 .derived
+*.profraw
 xcuserdata
 *.xcuserstate
 *.moved-aside
@@ -32,6 +33,9 @@ codesign/*.mobileprovision
 
 # Local API keys
 dashscope-api-key.txt
+
+# Local signing config
+tinyTypeless/Support/Signing.local.xcconfig
 
 # Local capture sources
 素材/

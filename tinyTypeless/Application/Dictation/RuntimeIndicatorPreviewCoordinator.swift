@@ -44,7 +44,10 @@ final class RuntimeIndicatorPreviewCoordinator: TriggerEngineDelegate, Recording
         send(.reset)
     }
 
-    func triggerDidPressDown(at timestamp: TimeInterval) {
+    func triggerDidPressDown(for intent: SessionIntent, at timestamp: TimeInterval) {
+        guard intent == .dictation else {
+            return
+        }
         _ = timestamp
         cancelScheduledSignals()
         guard !isPressed else {
@@ -61,7 +64,10 @@ final class RuntimeIndicatorPreviewCoordinator: TriggerEngineDelegate, Recording
         }
     }
 
-    func triggerDidRelease(at timestamp: TimeInterval) {
+    func triggerDidRelease(for intent: SessionIntent, at timestamp: TimeInterval) {
+        guard intent == .dictation else {
+            return
+        }
         _ = timestamp
         guard isPressed else {
             return

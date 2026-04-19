@@ -1,6 +1,6 @@
 import Foundation
 
-final class AliyunASRService: ASRService {
+final class AliyunASRService: ASRService, @unchecked Sendable {
     private let httpClient: HTTPClient
     private let apiKeyStore: APIKeyStore
 

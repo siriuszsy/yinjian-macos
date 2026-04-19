@@ -60,6 +60,7 @@
 		8B2134A84DC4E97ADC945D4D /* RuntimeIndicatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 404B47C4512B1458629146F6 /* RuntimeIndicatorState.swift */; };
 		8C86666E10DA1B0CBF68CDFF /* AppBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF5F0DE8DA97FC32FF00615F /* AppBootstrap.swift */; };
 		8D180DA979771448ABACE6B4 /* DictationSessionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05830E09245D1DCCC91DD07 /* DictationSessionContext.swift */; };
+		8DB236C038DCD24D2D469B07 /* PCMWaveFileRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9794C7AD0A3D146B3156A967 /* PCMWaveFileRecorder.swift */; };
 		8E02BBDAB7085BC6F49A754F /* FileSystemPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = A58BD063F10C2445D60E9E65 /* FileSystemPaths.swift */; };
 		936C549CE5D2502675CF781E /* DictationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B540F21946A330884533B02 /* DictationState.swift */; };
 		944939B49281C2FDD02DB126 /* CleanText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32952025C62FB7528E84075C /* CleanText.swift */; };
@@ -87,6 +88,7 @@
 		CAFFDDDF6793C1B2F20FBEBA /* AliyunRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCF20A0E84BDA0D129C88D8 /* AliyunRequestFactory.swift */; };
 		CB96A398E96108F47744458B /* AppKitStatusHUDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D1AB365D2D203CC0370194 /* AppKitStatusHUDController.swift */; };
 		CF6BB51B0D4B4541172E360E /* FakeTextInserter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C818E3306D48C2490C6D26FB /* FakeTextInserter.swift */; };
+		CFD61B412F94D20900B97F5D /* AliyunRealtimeASRServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD61B402F94D20900B97F5D /* AliyunRealtimeASRServiceTests.swift */; };
 		D403E5CF29972E7C037B04A7 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A1579F3217AFE1BEC6BD6A /* SettingsViewModel.swift */; };
 		D439A23F5E187C1A90CC99D0 /* FakeASRService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA1AE8083DE2D1D8BFF0D65 /* FakeASRService.swift */; };
 		D442D44E5EB4E48D12155812 /* ResilientAPIKeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25E4812DA610B3EC562045BA /* ResilientAPIKeyStore.swift */; };
@@ -144,6 +146,7 @@
 		367D6AC951D1641230C58592 /* AliyunASRResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliyunASRResponse.swift; sourceTree = "<group>"; };
 		3B540F21946A330884533B02 /* DictationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationState.swift; sourceTree = "<group>"; };
 		3C8B7270FC0B4D21B0E0C52F /* AXTextInserter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXTextInserter.swift; sourceTree = "<group>"; };
+		3D32BDC5011128CC2244C54E /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
 		402CA9A53C96FAEB9881F6E9 /* NSEventMonitorTriggerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSEventMonitorTriggerEngine.swift; sourceTree = "<group>"; };
 		404B47C4512B1458629146F6 /* RuntimeIndicatorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeIndicatorState.swift; sourceTree = "<group>"; };
 		450424D1E1F2012581759325 /* JSONSettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSettingsStoreTests.swift; sourceTree = "<group>"; };
@@ -161,6 +164,7 @@
 		65D93283AEFA15B531AF5C26 /* PasteboardFallbackInserter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteboardFallbackInserter.swift; sourceTree = "<group>"; };
 		69C8D65AB61D3A63B05CB28E /* FakeRecordingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeRecordingEngine.swift; sourceTree = "<group>"; };
 		69F3570C671C628A02CA7EDD /* TinyTypelessApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinyTypelessApp.swift; sourceTree = "<group>"; };
+		6AD67CF704EFFBA67685528A /* Signing.local.example.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.local.example.xcconfig; sourceTree = "<group>"; };
 		6AED6CB469536584B1E1E61F /* Clock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
 		6DA1AE8083DE2D1D8BFF0D65 /* FakeASRService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeASRService.swift; sourceTree = "<group>"; };
 		6FCF20A0E84BDA0D129C88D8 /* AliyunRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliyunRequestFactory.swift; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 		92755AFB0AFF448B592F2C05 /* RecordingEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingEngine.swift; sourceTree = "<group>"; };
 		93AAE409667F6CB96BAA28D9 /* CarbonHotKeyTriggerEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarbonHotKeyTriggerEngine.swift; sourceTree = "<group>"; };
 		94743C71D45698026C6179C3 /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		9794C7AD0A3D146B3156A967 /* PCMWaveFileRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PCMWaveFileRecorder.swift; sourceTree = "<group>"; };
 		97D1AB365D2D203CC0370194 /* AppKitStatusHUDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppKitStatusHUDController.swift; sourceTree = "<group>"; };
 		995AB0866B65FE614874954E /* SessionLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionLogStore.swift; sourceTree = "<group>"; };
 		9D3F60FC77CF8AF750B93554 /* DictationOrchestrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictationOrchestrator.swift; sourceTree = "<group>"; };
@@ -203,6 +208,7 @@
 		C818E3306D48C2490C6D26FB /* FakeTextInserter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeTextInserter.swift; sourceTree = "<group>"; };
 		C97DBA94EACB32E0A3B61492 /* AXContextInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AXContextInspector.swift; sourceTree = "<group>"; };
 		CAC6E9AB911AE7469A8459CC /* TriggerEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriggerEvent.swift; sourceTree = "<group>"; };
+		CFD61B402F94D20900B97F5D /* AliyunRealtimeASRServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliyunRealtimeASRServiceTests.swift; sourceTree = "<group>"; };
 		D46B2AE02E4B11E332E3397E /* TemporaryAudioFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryAudioFileWriter.swift; sourceTree = "<group>"; };
 		DB1350FFAA7FB521C4A63231 /* MenuContentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuContentBuilder.swift; sourceTree = "<group>"; };
 		DD5F8ADB40A5231A156DE7CF /* ASRTranscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ASRTranscript.swift; sourceTree = "<group>"; };
@@ -370,6 +376,7 @@
 			children = (
 				8517E158D3FA59586509D9AD /* AudioSessionPrewarmer.swift */,
 				32F77FA1F4C2205042D402E1 /* AVAudioRecordingEngine.swift */,
+				9794C7AD0A3D146B3156A967 /* PCMWaveFileRecorder.swift */,
 				D46B2AE02E4B11E332E3397E /* TemporaryAudioFileWriter.swift */,
 			);
 			path = Audio;
@@ -380,6 +387,8 @@
 			children = (
 				7C318AC18D4534FE630EC9B5 /* Constants.swift */,
 				179061EF2DF476B13A58B838 /* Info.plist */,
+				6AD67CF704EFFBA67685528A /* Signing.local.example.xcconfig */,
+				3D32BDC5011128CC2244C54E /* Signing.xcconfig */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -427,6 +436,7 @@
 				094A05FFFB7A8A9D9FBCB37A /* CleanupPromptBuilderTests.swift */,
 				DFC4A13C7147D5EBD936F0E2 /* CompositeTextInserterTests.swift */,
 				450424D1E1F2012581759325 /* JSONSettingsStoreTests.swift */,
+				CFD61B402F94D20900B97F5D /* AliyunRealtimeASRServiceTests.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -627,11 +637,11 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					02E47DADA4D75C38DAF4295F = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = "$(TINYTYPELESS_DEVELOPMENT_TEAM)";
 						ProvisioningStyle = Automatic;
 					};
 					FB93C3119C2A06BA312A2F82 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = "$(TINYTYPELESS_DEVELOPMENT_TEAM)";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -661,6 +671,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFD61B412F94D20900B97F5D /* AliyunRealtimeASRServiceTests.swift in Sources */,
 				FB8B6F9AF0F59A2555EF33B9 /* CleanupPromptBuilderTests.swift in Sources */,
 				5A94914C20D21D46F0D4BB66 /* CompositeTextInserterTests.swift in Sources */,
 				35AFD22ED4B027DD8A2FAEE3 /* DictationOrchestratorTests.swift in Sources */,
@@ -736,6 +747,7 @@
 				BE6DEACFBB88728BD4B5D851 /* MenuContentBuilder.swift in Sources */,
 				50C3B7FC89EC4542F611533D /* NSEventMonitorTriggerEngine.swift in Sources */,
 				01DF4726A9684E8EF950DE72 /* OSLogLogger.swift in Sources */,
+				8DB236C038DCD24D2D469B07 /* PCMWaveFileRecorder.swift in Sources */,
 				D9AB524F080F08D4D2711304 /* PasteboardFallbackInserter.swift in Sources */,
 				C898D597D8B64DEA5087B053 /* PermissionPromptPresenter.swift in Sources */,
 				1114849CECD04CFDD81B4738 /* PermissionService.swift in Sources */,
@@ -780,6 +792,7 @@
 /* Begin XCBuildConfiguration section */
 		2D656581E971AC08A14C845F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D32BDC5011128CC2244C54E /* Signing.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -815,7 +828,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -881,8 +893,10 @@
 		AAB5C7E215EDC065685EF362 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+                BUNDLE_LOADER = "$(TEST_HOST)";
+
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -890,16 +904,21 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlerobot.tinyTypelessTests;
+				PRODUCT_MODULE_NAME = tinyTypelessTests;
+				PRODUCT_NAME = tinyTypelessTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tinyTypeless.app/Contents/MacOS/tinyTypeless";
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tinyTypeless.app/Contents/MacOS/tinyTypeless";
+
 			};
 			name = Release;
 		};
 		AE32529F4CF48F157A0FA0E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+                BUNDLE_LOADER = "$(TEST_HOST)";
+
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -907,13 +926,18 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlerobot.tinyTypelessTests;
+				PRODUCT_MODULE_NAME = tinyTypelessTests;
+				PRODUCT_NAME = tinyTypelessTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tinyTypeless.app/Contents/MacOS/tinyTypeless";
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/tinyTypeless.app/Contents/MacOS/tinyTypeless";
+
+
 			};
 			name = Debug;
 		};
 		E140BBA0162AB543A40E84E7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3D32BDC5011128CC2244C54E /* Signing.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -949,7 +973,6 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

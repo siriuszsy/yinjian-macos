@@ -20,13 +20,15 @@ final class NSEventMonitorTriggerEngine: TriggerEngine, @unchecked Sendable {
     weak var delegate: TriggerEngineDelegate?
 
     private var triggerKey: TriggerKey
+    private let intent: SessionIntent
     private var isRunning = false
     private var isTriggerPressed = false
     private var globalMonitor: Any?
     private var localMonitor: Any?
 
-    init(initialKey: TriggerKey) {
+    init(initialKey: TriggerKey, intent: SessionIntent = .dictation) {
         triggerKey = initialKey
+        self.intent = intent
     }
 
     func start() throws {
@@ -114,9 +116,9 @@ final class NSEventMonitorTriggerEngine: TriggerEngine, @unchecked Sendable {
         let timestamp = Date().timeIntervalSince1970
 
         if pressed {
-            delegate?.triggerDidPressDown(at: timestamp)
+            delegate?.triggerDidPressDown(for: intent, at: timestamp)
         } else {
-            delegate?.triggerDidRelease(at: timestamp)
+            delegate?.triggerDidRelease(for: intent, at: timestamp)
         }
     }
 

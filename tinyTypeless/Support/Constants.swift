@@ -2,7 +2,7 @@ import Foundation
 
 enum Constants {
     enum App {
-        static let displayName = "tinyTypeless"
+        static let displayName = BuildInfo.displayName
     }
 
     enum Metrics {

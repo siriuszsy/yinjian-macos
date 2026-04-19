@@ -11,7 +11,7 @@ final class RuntimeIndicatorStateMachine {
         case .appReady:
             nextState = .idle
         case .triggerPressed(let triggerKey):
-            nextState = .listening(triggerKey: triggerKey)
+            nextState = .listening(intent: .dictation, triggerLabel: triggerKey.displayName)
         case .triggerReleased, .audioFinalizationStarted:
             nextState = .processing(stage: .finalizingCapture)
         case .asrRequestStarted:

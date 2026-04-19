@@ -1,6 +1,8 @@
 import Foundation
+import OSLog
 
 final class CompositeTextInserter: TextInserter {
+    private let logger = Logger(subsystem: BuildInfo.bundleIdentifier, category: "Insertion")
     private let primary: TextInserter
     private let fallback: TextInserter?
 
@@ -22,6 +24,7 @@ final class CompositeTextInserter: TextInserter {
             return primaryResult
         }
 
+        logger.notice("Primary insert failed, falling back. reason=\(primaryResult.failureReason ?? "unknown", privacy: .public), targetApp=\(context.applicationName, privacy: .public)")
         return try fallback.insert(text, into: context)
     }
 }
