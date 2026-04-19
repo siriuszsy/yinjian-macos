@@ -1,0 +1,6 @@
+#include? "Signing.local.xcconfig"
+
+// Keep automatic signing on, but source the team locally so the repo does not
+// hardcode a personal Apple Developer membership.
+CODE_SIGN_STYLE = Automatic
+DEVELOPMENT_TEAM = $(VOICEKEY_DEVELOPMENT_TEAM)

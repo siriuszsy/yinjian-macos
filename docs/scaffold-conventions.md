@@ -1,4 +1,4 @@
-# tinyTypeless 脚手架约束
+# voiceKey 脚手架约束
 
 最后更新：2026-04-11
 
@@ -143,9 +143,9 @@ Domain -> AppKit / SwiftUI
 
 ## 8. 当前脚手架入口
 
-- 项目生成配置：[project.yml](/Users/littlerobot/working_code/tinyTypeless/project.yml)
-- 代码架构蓝图：[code-architecture-blueprint.md](/Users/littlerobot/working_code/tinyTypeless/docs/code-architecture-blueprint.md)
-- Swift 骨架设计：[swift-scaffold-design.md](/Users/littlerobot/working_code/tinyTypeless/docs/swift-scaffold-design.md)
+- 项目生成配置：[project.yml](../project.yml)
+- 代码架构蓝图：[code-architecture-blueprint.md](./code-architecture-blueprint.md)
+- Swift 骨架设计：[swift-scaffold-design.md](./swift-scaffold-design.md)
 
 ## 9. 结论
 

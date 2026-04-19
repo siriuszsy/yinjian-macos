@@ -33,8 +33,8 @@
 ### 2.1 直接构建
 
 ```bash
-xcodebuild -project tinyTypeless.xcodeproj \
-  -scheme tinyTypeless \
+xcodebuild -project voiceKey.xcodeproj \
+  -scheme voiceKey \
   -configuration Debug \
   -derivedDataPath .derived \
   build
@@ -45,7 +45,7 @@ xcodebuild -project tinyTypeless.xcodeproj \
 构建产物默认在：
 
 ```text
-.derived/Build/Products/Debug/tinyTypeless.app
+.derived/Build/Products/Debug/voiceKey.app
 ```
 
 如果只是本地调试，可以直接从 Xcode 运行。
@@ -107,7 +107,7 @@ API Key 不会写进仓库。
 
 - 在 `Xcode > Settings > Accounts` 里添加你的 Apple 账号
 - 让 Xcode 为这台机器创建或下载 `Apple Development` 证书
-- 将你的 `Team ID` 写入本地文件 `tinyTypeless/Support/Signing.local.xcconfig`
+- 将你的 `Team ID` 写入本地文件 `voiceKey/Support/Signing.local.xcconfig`
 - 保持 `Bundle Identifier` 稳定
 - 保持 `.app` 安装路径稳定
 

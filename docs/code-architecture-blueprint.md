@@ -1,4 +1,4 @@
-# tinyTypeless V1 代码架构蓝图
+# voiceKey V1 代码架构蓝图
 
 最后更新：2026-04-11
 
@@ -6,7 +6,7 @@
 
 这份文档只回答一个问题：
 
-`代码应该怎么组织，才能在保持实现足够轻的同时，优先保证 Typeless 级手感。`
+`代码应该怎么组织，才能在保持实现足够轻的同时，优先保证 竞品 级手感。`
 
 结论：
 
@@ -96,11 +96,11 @@ flowchart TD
 建议目录如下：
 
 ```text
-tinyTypeless/
-├── TinyTypeless.xcodeproj
-├── tinyTypeless/
+voiceKey/
+├── VoiceKey.xcodeproj
+├── voiceKey/
 │   ├── App/
-│   │   ├── TinyTypelessApp.swift
+│   │   ├── VoiceKeyApp.swift
 │   │   ├── AppDelegate.swift
 │   │   ├── AppBootstrap.swift
 │   │   ├── AppEnvironment.swift
@@ -198,7 +198,7 @@ tinyTypeless/
 │   └── Support/
 │       ├── Constants.swift
 │       └── Extensions/
-├── tinyTypelessTests/
+├── voiceKeyTests/
 │   ├── Application/
 │   │   └── DictationOrchestratorTests.swift
 │   ├── Infrastructure/

@@ -1,10 +1,10 @@
-# tinyTypeless 技术架构
+# voiceKey 技术架构
 
 最后更新：2026-04-11
 
 ## 1. 当前权威结论
 
-`tinyTypeless v1` 只做一条黄金路径：
+`voiceKey v1` 只做一条黄金路径：
 
 `按住触发键 -> 录音 -> 松开触发键 -> ASR -> clean-up -> 插入当前输入框 -> 结束`
 
@@ -27,7 +27,7 @@
 - app profile UI
 - hands-free
 
-这些不是做不到，而是现在做会把项目从“像 Typeless”做成“功能平台”。
+这些不是做不到，而是现在做会把项目从“像 竞品”做成“功能平台”。
 
 ## 2. 核心技术选型
 
@@ -120,7 +120,7 @@ v1 只保留最小状态：
 
 核心判断：
 
-- Typeless 的核心价值不是功能列表
+- 竞品 的核心价值不是功能列表
 - 而是“说完就落成干净文本”
 - 你现在最需要的是可替代，不是可扩展
 
@@ -161,7 +161,7 @@ v1 只保留最小状态：
 为什么不选：
 
 - 启动和控制粒度差
-- 很难做出 Typeless 那种“按下即听”的反应
+- 很难做出 竞品 那种“按下即听”的反应
 
 #### C. ASR 改成 `qwen3-asr-flash-filetrans`
 
@@ -459,4 +459,4 @@ v1 只保留最小状态：
 
 `Swift menubar host + configurable hold-to-talk trigger + AVAudioEngine + qwen3-asr-flash + qwen3.5-flash + AXUIElement insertion`
 
-这版已经足够接近 Typeless 的核心，不再需要扩设计。
+这版已经足够接近 竞品 的核心，不再需要扩设计。

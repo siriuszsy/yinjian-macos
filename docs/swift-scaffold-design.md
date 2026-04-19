@@ -1,4 +1,4 @@
-# tinyTypeless V1 Swift 骨架设计
+# voiceKey V1 Swift 骨架设计
 
 最后更新：2026-04-11
 
@@ -8,7 +8,7 @@
 
 `如果现在开始建 Xcode 工程，第一批 Swift 文件应该怎么落，类怎么连，接口怎么收。`
 
-它是 [代码架构蓝图](/Users/littlerobot/working_code/tinyTypeless/docs/code-architecture-blueprint.md) 的下一层。
+它是 [代码架构蓝图](./code-architecture-blueprint.md) 的下一层。
 
 这里不再讨论“要不要这么做”，只讨论：
 
@@ -49,10 +49,10 @@ v1 先按两条线推进：
 ## 3. 推荐文件树
 
 ```text
-tinyTypeless/
-├── tinyTypeless/
+voiceKey/
+├── voiceKey/
 │   ├── App/
-│   │   ├── TinyTypelessApp.swift
+│   │   ├── VoiceKeyApp.swift
 │   │   ├── AppDelegate.swift
 │   │   ├── AppBootstrap.swift
 │   │   ├── AppEnvironment.swift
@@ -146,7 +146,7 @@ tinyTypeless/
 │       ├── Defaults/
 │       │   └── settings.default.json
 │       └── PrivacyInfo.xcprivacy
-└── tinyTypelessTests/
+└── voiceKeyTests/
 ```
 
 ## 4. 第一批必须落的文件
@@ -155,7 +155,7 @@ tinyTypeless/
 
 ### 4.1 App
 
-- `TinyTypelessApp.swift`
+- `VoiceKeyApp.swift`
 - `AppDelegate.swift`
 - `AppBootstrap.swift`
 - `AppEnvironment.swift`
@@ -749,7 +749,7 @@ func buildEnvironment() throws -> AppEnvironment {
 测试目录第一批这样建：
 
 ```text
-tinyTypelessTests/
+voiceKeyTests/
 ├── Application/
 │   └── DictationOrchestratorTests.swift
 ├── Infrastructure/

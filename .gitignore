@@ -11,8 +11,8 @@ xcuserdata
 *.perspectivev3
 
 # Xcode generated artifacts
-tinyTypeless.xcodeproj/project.xcworkspace/xcuserdata
-tinyTypeless.xcodeproj/xcuserdata
+voiceKey.xcodeproj/project.xcworkspace/xcuserdata
+voiceKey.xcodeproj/xcuserdata
 
 # Local app data
 tmp
@@ -35,7 +35,7 @@ codesign/*.mobileprovision
 dashscope-api-key.txt
 
 # Local signing config
-tinyTypeless/Support/Signing.local.xcconfig
+voiceKey/Support/Signing.local.xcconfig
 
 # Local capture sources
 素材/

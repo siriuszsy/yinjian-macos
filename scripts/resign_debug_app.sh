@@ -1,13 +1,14 @@
 #!/bin/zsh
 set -euo pipefail
 
-APP_PATH="${1:-/Users/littlerobot/working_code/tinyTypeless/.derived/Build/Products/Debug/tinyTypeless.app}"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+APP_PATH="${1:-$ROOT_DIR/.derived/Build/Products/Debug/voiceKey.app}"
 LOGIN_KEYCHAIN_PATH="$HOME/Library/Keychains/login.keychain-db"
-LOCAL_KEYCHAIN_PATH="${TINYTYPELESS_CODESIGN_KEYCHAIN_PATH:-$HOME/Library/Keychains/tinyTypeless-dev-v2.keychain-db}"
-LOCAL_CERT_NAME="${TINYTYPELESS_CODESIGN_CERT_NAME:-tinyTypeless Local Development}"
+LOCAL_KEYCHAIN_PATH="${VOICEKEY_CODESIGN_KEYCHAIN_PATH:-$HOME/Library/Keychains/voiceKey-dev-v2.keychain-db}"
+LOCAL_CERT_NAME="${VOICEKEY_CODESIGN_CERT_NAME:-voiceKey Local Development}"
 KEYCHAIN_PATH=""
 CERT_NAME=""
-KEYCHAIN_PASSWORD="${TINYTYPELESS_CODESIGN_KEYCHAIN_PASSWORD:-}"
+KEYCHAIN_PASSWORD="${VOICEKEY_CODESIGN_KEYCHAIN_PASSWORD:-}"
 
 detect_apple_development_identity() {
   security find-identity -v -p codesigning "$LOGIN_KEYCHAIN_PATH" 2>/dev/null \
@@ -25,12 +26,12 @@ else
 fi
 
 if [[ "$KEYCHAIN_PATH" == "$LOCAL_KEYCHAIN_PATH" && -z "$KEYCHAIN_PASSWORD" ]]; then
-  KEYCHAIN_PASSWORD="$(launchctl getenv TINYTYPELESS_CODESIGN_KEYCHAIN_PASSWORD 2>/dev/null || true)"
+  KEYCHAIN_PASSWORD="$(launchctl getenv VOICEKEY_CODESIGN_KEYCHAIN_PASSWORD 2>/dev/null || true)"
 fi
 
 if [[ "$KEYCHAIN_PATH" == "$LOCAL_KEYCHAIN_PATH" && -z "$KEYCHAIN_PASSWORD" ]]; then
   echo "No Apple Development identity found in login.keychain-db"
-  echo "Missing TINYTYPELESS_CODESIGN_KEYCHAIN_PASSWORD for local fallback signing"
+  echo "Missing VOICEKEY_CODESIGN_KEYCHAIN_PASSWORD for local fallback signing"
   exit 1
 fi
 

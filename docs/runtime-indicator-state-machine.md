@@ -1,4 +1,4 @@
-# tinyTypeless Runtime Indicator State Machine
+# voiceKey Runtime Indicator State Machine
 
 最后更新：2026-04-11
 
@@ -193,10 +193,10 @@ fallback 路径是：
 
 ## 7. 当前代码入口
 
-- 状态定义：[RuntimeIndicatorState.swift](/Users/littlerobot/working_code/tinyTypeless/tinyTypeless/Domain/Models/RuntimeIndicatorState.swift)
-- 状态机实现：[RuntimeIndicatorStateMachine.swift](/Users/littlerobot/working_code/tinyTypeless/tinyTypeless/Application/Dictation/RuntimeIndicatorStateMachine.swift)
-- preview 协调器：[RuntimeIndicatorPreviewCoordinator.swift](/Users/littlerobot/working_code/tinyTypeless/tinyTypeless/Application/Dictation/RuntimeIndicatorPreviewCoordinator.swift)
-- orb 视图：[StatusHUD.swift](/Users/littlerobot/working_code/tinyTypeless/tinyTypeless/Presentation/HUD/StatusHUD.swift)
+- 状态定义：[RuntimeIndicatorState.swift](../voiceKey/Domain/Models/RuntimeIndicatorState.swift)
+- 状态机实现：[RuntimeIndicatorStateMachine.swift](../voiceKey/Application/Dictation/RuntimeIndicatorStateMachine.swift)
+- preview 协调器：[RuntimeIndicatorPreviewCoordinator.swift](../voiceKey/Application/Dictation/RuntimeIndicatorPreviewCoordinator.swift)
+- orb 视图：[StatusHUD.swift](../voiceKey/Presentation/HUD/StatusHUD.swift)
 
 ## 8. 结论
 

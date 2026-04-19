@@ -25,8 +25,8 @@
 ## 3. 最小编译路径
 
 ```bash
-xcodebuild -project tinyTypeless.xcodeproj \
-  -scheme tinyTypeless \
+xcodebuild -project voiceKey.xcodeproj \
+  -scheme voiceKey \
   -configuration Debug \
   -derivedDataPath .derived \
   build
@@ -60,7 +60,7 @@ xcodebuild -project tinyTypeless.xcodeproj \
 调试时建议最终运行路径固定在：
 
 ```text
-/Applications/tinyTypeless.app
+/Applications/voiceKey.app
 ```
 
 如果你频繁换运行路径，`辅助功能` 授权容易失效。
@@ -100,8 +100,8 @@ xcodebuild -project tinyTypeless.xcodeproj \
 
 当前脚本要求的环境变量：
 
-- `TINYTYPELESS_CODESIGN_KEYCHAIN_PASSWORD`
-- `TINYTYPELESS_CODESIGN_P12_PASSWORD`
+- `VOICEKEY_CODESIGN_KEYCHAIN_PASSWORD`
+- `VOICEKEY_CODESIGN_P12_PASSWORD`
 
 注意：
 

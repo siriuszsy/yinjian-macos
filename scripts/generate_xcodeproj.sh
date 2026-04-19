@@ -11,4 +11,4 @@ fi
 
 cd "$ROOT_DIR"
 xcodegen generate --spec project.yml
-echo "Generated $ROOT_DIR/tinyTypeless.xcodeproj"
+echo "Generated $ROOT_DIR/voiceKey.xcodeproj"

@@ -5,8 +5,8 @@ x509_extensions = ext
 prompt = no
 
 [ dn ]
-CN = tinyTypeless Local Development
-O = tinyTypeless
+CN = voiceKey Local Development
+O = voiceKey
 OU = Local Development
 
 [ ext ]

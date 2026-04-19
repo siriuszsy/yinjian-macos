@@ -1,24 +1,24 @@
 #!/bin/zsh
 set -euo pipefail
 
-ROOT="/Users/littlerobot/working_code/tinyTypeless"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CODESIGN_DIR="$ROOT/codesign"
-KEYCHAIN_PATH="$HOME/Library/Keychains/tinyTypeless-dev-v2.keychain-db"
-CERT_NAME="tinyTypeless Local Development"
+KEYCHAIN_PATH="$HOME/Library/Keychains/voiceKey-dev-v2.keychain-db"
+CERT_NAME="voiceKey Local Development"
 OPENSSL_CONFIG="$CODESIGN_DIR/openssl-codesign.cnf"
-KEY_PATH="$CODESIGN_DIR/tinyTypeless-dev.key.pem"
-CERT_PATH="$CODESIGN_DIR/tinyTypeless-dev.cert.pem"
-P12_PATH="$CODESIGN_DIR/tinyTypeless-dev.p12"
-KEYCHAIN_PASSWORD="${TINYTYPELESS_CODESIGN_KEYCHAIN_PASSWORD:-}"
-P12_PASSWORD="${TINYTYPELESS_CODESIGN_P12_PASSWORD:-$KEYCHAIN_PASSWORD}"
+KEY_PATH="$CODESIGN_DIR/voiceKey-dev.key.pem"
+CERT_PATH="$CODESIGN_DIR/voiceKey-dev.cert.pem"
+P12_PATH="$CODESIGN_DIR/voiceKey-dev.p12"
+KEYCHAIN_PASSWORD="${VOICEKEY_CODESIGN_KEYCHAIN_PASSWORD:-}"
+P12_PASSWORD="${VOICEKEY_CODESIGN_P12_PASSWORD:-$KEYCHAIN_PASSWORD}"
 
 if [[ -z "$KEYCHAIN_PASSWORD" ]]; then
-  echo "Missing TINYTYPELESS_CODESIGN_KEYCHAIN_PASSWORD"
+  echo "Missing VOICEKEY_CODESIGN_KEYCHAIN_PASSWORD"
   exit 1
 fi
 
 if [[ -z "$P12_PASSWORD" ]]; then
-  echo "Missing TINYTYPELESS_CODESIGN_P12_PASSWORD"
+  echo "Missing VOICEKEY_CODESIGN_P12_PASSWORD"
   exit 1
 fi
 

@@ -1,4 +1,4 @@
-# tinyTypeless Cleanup Prompt v2 草案
+# voiceKey Cleanup Prompt v2 草案
 
 最后更新：2026-04-13
 
@@ -43,7 +43,7 @@
 
 ```text
 #Role#
-你是 tinyTypeless 的语音输入文本清理器。
+你是 voiceKey 的语音输入文本清理器。
 你的职责不是回答问题，也不是帮用户润色文章，而是把 ASR 转写结果整理成用户最终想直接输入的文本。
 
 #Core Rule#
@@ -323,13 +323,13 @@
 原始：
 
 ```text
-把日志看一下，在 /Users/littlerobot/Library/Application Support/tinyTypeless/sessions.jsonl 这个文件里。
+把日志看一下，在 /Users/littlerobot/Library/Application Support/voiceKey/sessions.jsonl 这个文件里。
 ```
 
 输出：
 
 ```text
-把日志看一下，在 /Users/littlerobot/Library/Application Support/tinyTypeless/sessions.jsonl 这个文件里。
+把日志看一下，在 /Users/littlerobot/Library/Application Support/voiceKey/sessions.jsonl 这个文件里。
 ```
 
 ### 样例 8：快捷键与英文术语保护

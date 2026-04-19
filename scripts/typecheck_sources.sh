@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-SRC_DIR="$ROOT_DIR/tinyTypeless"
+SRC_DIR="$ROOT_DIR/voiceKey"
 
 SWIFT_FILES=()
 while IFS= read -r file; do

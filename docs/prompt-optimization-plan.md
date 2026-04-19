@@ -1,4 +1,4 @@
-# tinyTypeless Prompt 优化方案
+# voiceKey Prompt 优化方案
 
 最后更新：2026-04-13
 
@@ -175,7 +175,7 @@ few-shot 的问题不是数量少本身，而是：
 - 用分隔符拆开不同内容单元
 - prompt chaining 更适合逻辑复杂任务，不是默认方案
 
-对 tinyTypeless 这类低延迟 cleanup 来说，这意味着：
+对 voiceKey 这类低延迟 cleanup 来说，这意味着：
 
 - 不应继续把规则堆成一大段自然语言
 - 应改成分区明确的结构化 prompt
@@ -196,7 +196,7 @@ OpenAI Prompt Optimizer 还明确建议：
 - 记录具体 critique
 - 用 graders 或人工 rubric 去迭代 prompt
 
-这对 tinyTypeless 的直接启发是：
+这对 voiceKey 的直接启发是：
 
 - prompt 调优必须离线化
 - 不能只靠“今天试了感觉顺一点”

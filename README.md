@@ -131,8 +131,8 @@ zsh scripts/install_debug_app.sh
 最小构建命令：
 
 ```bash
-xcodebuild -project tinyTypeless.xcodeproj \
-  -scheme tinyTypeless \
+xcodebuild -project voiceKey.xcodeproj \
+  -scheme voiceKey \
   -configuration Debug \
   -derivedDataPath .derived \
   build
@@ -157,14 +157,14 @@ xcodebuild -project tinyTypeless.xcodeproj \
 源码结构：
 
 ```text
-tinyTypeless/
+voiceKey/
 ├── App/
 ├── Application/
 ├── Domain/
 ├── Infrastructure/
 ├── Presentation/
 ├── Resources/
-└── tinyTypelessTests/
+└── voiceKeyTests/
 ```
 
 职责划分：
@@ -198,7 +198,7 @@ tinyTypeless/
 
 ## 项目文档
 
-- [竞品调研](./research/typeless-research-2026-04-10.md)
+- [竞品调研](./research/competitor-research-2026-04-10.md)
 - [产品需求文档](./docs/product-requirements.md)
 - [技术架构](./docs/technical-architecture.md)
 - [V1 系统设计](./docs/v1-system-design.md)
