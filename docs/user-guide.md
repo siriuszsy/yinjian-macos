@@ -17,7 +17,7 @@
 
 ## 2. 下载与安装
 
-1. 打开 [GitHub Releases](https://github.com/siriuszsy/yinjian-macos/releases)。
+1. 打开 [GitHub Releases](https://github.com/siriuszsy/voiceKey/releases)。
 2. 下载 `voiceKey-1.0.0-macos.zip`。
 3. 解压后把 `voiceKey.app` 拖到 `Applications`。
 4. 首次启动时，如果 macOS 提示应用来自互联网或开发者未验证，先右键 `voiceKey.app`，选择“打开”。

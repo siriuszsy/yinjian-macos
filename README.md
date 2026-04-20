@@ -26,7 +26,7 @@
 
 快速入口：
 
-- [GitHub Releases](https://github.com/siriuszsy/yinjian-macos/releases)
+- [GitHub Releases](https://github.com/siriuszsy/voiceKey/releases)
 - [用户使用手册](./docs/user-guide.md)
 - [源码发布说明](./docs/source-release-guide.md)
 
