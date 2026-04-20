@@ -6,6 +6,8 @@
 
 <p align="center">一个面向 macOS 的语音输入工具。</p>
 
+> 当前已提供下载：前往 [GitHub Releases](https://github.com/siriuszsy/voiceKey/releases) 下载最新的 `voiceKey-1.0.0-macos.zip`，解压后即可得到 `voiceKey.app`。
+
 目标很简单：
 
 `按住说话 -> 松开 -> 语音转文字 -> 文本整理 -> 自动写回当前光标`
@@ -26,14 +28,14 @@
 
 快速入口：
 
-- [GitHub Releases](https://github.com/siriuszsy/voiceKey/releases)
+- [GitHub Releases（下载）](https://github.com/siriuszsy/voiceKey/releases)
 - [用户使用手册](./docs/user-guide.md)
 - [源码发布说明](./docs/source-release-guide.md)
 
 ## 1.0 功能
 
 - 全局触发录音与翻译
-  当前开发版默认使用 `Fn` 做听写，`Fn + Control` 做翻译，`Fn + Shift` 作为备选
+  当前版本默认使用 `Fn` 做听写，`Fn + Control` 做翻译，`Fn + Shift` 作为备选
 - 底部悬浮输入状态
   录音时显示波形，处理中显示 `思考中`
 - 语音转文本
@@ -156,7 +158,7 @@ xcodebuild -project voiceKey.xcodeproj \
 - 键盘监听
   当前默认不会主动要求；只有个别机器收不到 `Fn` 时，才需要手动打开
 
-当前开发版默认触发键是 `Fn` 和 `Fn + Control`，会先直接尝试注册。  
+当前默认触发键是 `Fn` 和 `Fn + Control`，会先直接尝试注册。  
 如果你怀疑是辅助功能没有真正生效，先从菜单栏点一次 `写入测试文本`，不要直接走整条语音链路。
 
 ## 架构
