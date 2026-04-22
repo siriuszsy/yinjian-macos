@@ -6,17 +6,25 @@ final class AppKitStatusHUDController: StatusHUDControlling, @unchecked Sendable
     private var panel: FloatingOrbPanel?
 
     func render(_ state: RuntimeIndicatorState) {
-        update(state: state)
+        Task { @MainActor [weak self] in
+            self?.update(state: state)
+        }
     }
 
     func updateInputLevel(_ level: Float) {
-        DispatchQueue.main.async {
+        Task { @MainActor [weak self] in
+            guard let self else {
+                return
+            }
             self.viewModel.applyInputLevel(max(0, min(CGFloat(level), 1)))
         }
     }
 
     func updateVisualization(barLevels: [Float], level: Float) {
-        DispatchQueue.main.async {
+        Task { @MainActor [weak self] in
+            guard let self else {
+                return
+            }
             self.viewModel.applyVisualization(
                 barLevels: barLevels.map { max(0, min(CGFloat($0), 1)) },
                 level: max(0, min(CGFloat(level), 1))
@@ -24,25 +32,25 @@ final class AppKitStatusHUDController: StatusHUDControlling, @unchecked Sendable
         }
     }
 
+    @MainActor
     private func update(state: HUDState) {
-        DispatchQueue.main.async {
-            let wasPresented = self.viewModel.state.presentsOrb
-            self.viewModel.state = state
-            if !self.isListening(state) {
-                self.viewModel.resetInputLevel()
-            }
-
-            guard state.presentsOrb else {
-                self.hidePanel(animated: wasPresented)
-                return
-            }
-
-            self.ensurePanel()
-            self.positionPanel()
-            self.showPanel(animated: !wasPresented)
+        let wasPresented = self.viewModel.state.presentsOrb
+        self.viewModel.state = state
+        if !self.isListening(state) {
+            self.viewModel.resetInputLevel()
         }
+
+        guard state.presentsOrb else {
+            self.hidePanel(animated: wasPresented)
+            return
+        }
+
+        self.ensurePanel()
+        self.positionPanel()
+        self.showPanel(animated: !wasPresented)
     }
 
+    @MainActor
     private func ensurePanel() {
         guard panel == nil else {
             return
@@ -70,6 +78,7 @@ final class AppKitStatusHUDController: StatusHUDControlling, @unchecked Sendable
         self.panel = panel
     }
 
+    @MainActor
     private func showPanel(animated: Bool) {
         guard let panel else {
             return
@@ -88,27 +97,34 @@ final class AppKitStatusHUDController: StatusHUDControlling, @unchecked Sendable
         }
     }
 
+    @MainActor
     private func hidePanel(animated: Bool) {
         guard let panel else {
             return
         }
 
-        let orderOut = {
+        guard animated else {
             panel.orderOut(nil)
             panel.alphaValue = 1
-        }
-
-        guard animated else {
-            orderOut()
             return
         }
 
-        NSAnimationContext.runAnimationGroup({ context in
+        NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.16
             panel.animator().alphaValue = 0
-        }, completionHandler: orderOut)
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.16) { [weak panel] in
+            guard let panel else {
+                return
+            }
+
+            panel.orderOut(nil)
+            panel.alphaValue = 1
+        }
     }
 
+    @MainActor
     private func positionPanel() {
         guard let panel else {
             return
@@ -125,6 +141,7 @@ final class AppKitStatusHUDController: StatusHUDControlling, @unchecked Sendable
         panel.setFrame(NSRect(origin: origin, size: NSSize(width: width, height: height)), display: true)
     }
 
+    @MainActor
     private func isListening(_ state: HUDState) -> Bool {
         if case .listening = state {
             return true

@@ -6,13 +6,13 @@
 
 <p align="center">一个面向 macOS 的语音输入工具。</p>
 
-> 当前已提供下载：前往 [GitHub Releases](https://github.com/siriuszsy/voiceKey/releases) 下载最新的 `voiceKey-1.0.1-macos.zip`，解压后即可得到 `voiceKey.app`。
+> 当前已提供下载：前往 [GitHub Releases](https://github.com/siriuszsy/voiceKey/releases) 下载最新的 `voiceKey-1.0.2-macos.zip`，解压后即可得到 `voiceKey.app`。
 
 目标很简单：
 
 `按住说话 -> 松开 -> 语音转文字 -> 文本整理 -> 自动写回当前光标`
 
-从 `1.0.1` 开始，这个仓库同时提供：
+从 `1.0.2` 开始，这个仓库同时提供：
 
 - 源码
 - GitHub Releases 里的 macOS 编译产物
@@ -31,8 +31,10 @@
 - [GitHub Releases（下载）](https://github.com/siriuszsy/voiceKey/releases)
 - [用户使用手册](./docs/user-guide.md)
 - [源码发布说明](./docs/source-release-guide.md)
+- [内部详细设计图](./docs/internal-design.md)
+- [类图](./docs/class-diagram.md)
 
-## 1.0.1 功能
+## 1.0.2 功能
 
 - 全局触发录音与翻译
   当前版本默认使用 `Fn` 做听写，`Fn + Control` 做翻译，`Fn + Shift` 作为备选
@@ -61,9 +63,9 @@
 
 相关设计文档：
 
-- [V1 系统设计](./docs/v1-system-design.md)
+- [内部详细设计图](./docs/internal-design.md)
+- [类图](./docs/class-diagram.md)
 - [Runtime Indicator 状态机](./docs/runtime-indicator-state-machine.md)
-- [技术架构](./docs/technical-architecture.md)
 
 ## 界面预览
 
@@ -186,6 +188,8 @@ voiceKey/
 
 更详细的架构说明：
 
+- [内部详细设计图](./docs/internal-design.md)
+- [类图](./docs/class-diagram.md)
 - [代码架构蓝图](./docs/code-architecture-blueprint.md)
 - [Swift 骨架设计](./docs/swift-scaffold-design.md)
 - [工程权衡决策](./docs/engineering-tradeoff-decision.md)
@@ -207,6 +211,8 @@ voiceKey/
 ## 项目文档
 
 - [竞品调研](./research/competitor-research-2026-04-10.md)
+- [内部详细设计图](./docs/internal-design.md)
+- [类图](./docs/class-diagram.md)
 - [产品需求文档](./docs/product-requirements.md)
 - [技术架构](./docs/technical-architecture.md)
 - [V1 系统设计](./docs/v1-system-design.md)

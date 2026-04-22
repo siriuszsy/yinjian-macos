@@ -46,26 +46,6 @@ final class SettingsViewModel: ObservableObject {
         TriggerKey.translationChoices.filter { $0 != settings.triggerKey }
     }
 
-    var showsInputMonitoringSetup: Bool {
-        settings.usesInputMonitoringTrigger
-    }
-
-    var inputMonitoringState: PermissionState {
-        if settings.usesInputMonitoringTrigger {
-            return permissionStatus.inputMonitoring
-        }
-
-        return .notRequired
-    }
-
-    var accessibilityState: PermissionState {
-        permissionStatus.accessibility
-    }
-
-    var setupSectionSubtitle: String {
-        "当前默认用 Fn 系列触发。默认直接尝试注册；如果某台机器收不到，再把键盘监听当排障项。"
-    }
-
     var microphoneDisplayName: String {
         if settings.microphoneDeviceID == "system-default" {
             return "系统默认"
@@ -74,12 +54,8 @@ final class SettingsViewModel: ObservableObject {
         return settings.microphoneDeviceID
     }
 
-    var asrModelDisplayName: String {
-        "通义语音识别（\(settings.asrMode.displayName)）"
-    }
-
-    var cleanupModelDisplayName: String {
-        settings.cleanupModel
+    var accessibilityState: PermissionState {
+        permissionStatus.accessibility
     }
 
     func save() {
@@ -170,10 +146,6 @@ final class SettingsViewModel: ObservableObject {
         }
     }
 
-    func requestInputMonitoring() {
-        openInputMonitoringSettings()
-    }
-
     func requestAccessibility() {
         _ = permissionService.requestAccessibilityAccess()
         setupMessage = "辅助功能通常需要在系统设置里手动打开。完成后回到这里会自动刷新；没授权前会先回退到剪贴板。"
@@ -189,10 +161,6 @@ final class SettingsViewModel: ObservableObject {
         }
     }
 
-    func openInputMonitoringSettings() {
-        openSystemSettings(for: .inputMonitoring, successMessage: "已打开系统设置的键盘监听页。授权后回到这里会自动刷新；如果热键仍无效，请重启应用。")
-    }
-
     func openAccessibilitySettings() {
         openSystemSettings(for: .accessibility, successMessage: "已打开系统设置的辅助功能页。授权后回到这里会自动刷新；如果写入仍无效，请重启应用。")
     }
@@ -203,20 +171,6 @@ final class SettingsViewModel: ObservableObject {
 
     var permissionHintText: String {
         "默认热键是 `Fn` 听写、`Fn + Control` 翻译。当前实现会直接尝试注册；如果个别机器收不到，再去打开键盘监听。"
-    }
-
-    var permissionOverviewTitle: String {
-        "当前版本需要的权限"
-    }
-
-    var permissionOverviewLines: [String] {
-        [
-            "1. 麦克风：录音必须要开。",
-            "2. 热键：默认是 `Fn` 听写，`Fn + Control` 翻译；`Fn + Shift` 可作为备选热键。",
-            "3. 辅助功能：授权后优先直写当前输入框。",
-            "4. 键盘监听：默认不主动要求；如果某台机器收不到 Fn，再去系统设置里打开。",
-            "5. 回退：没授权时会复制到剪贴板；有权限但直写失败时，再尝试粘贴回退。"
-        ]
     }
 
     private func openSystemSettings(

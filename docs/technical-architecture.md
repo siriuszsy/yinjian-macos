@@ -2,6 +2,10 @@
 
 最后更新：2026-04-11
 
+> 注意：这份文档保留的是早期架构草案，里面仍有 `Right Option`、`CGEventTap`、`IOHIDManager` 等历史方案。当前权威版本请优先看：
+> - [内部详细设计图](./internal-design.md)
+> - [类图](./class-diagram.md)
+
 ## 1. 当前权威结论
 
 `voiceKey v1` 只做一条黄金路径：

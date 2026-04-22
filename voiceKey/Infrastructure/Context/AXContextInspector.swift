@@ -38,7 +38,7 @@ final class AXContextInspector: ContextInspector {
             return nil
         }
 
-        return unsafeBitCast(value, to: AXUIElement.self)
+        return unsafeDowncast(value, to: AXUIElement.self)
     }
 
     private func role(of element: AXUIElement) -> String? {

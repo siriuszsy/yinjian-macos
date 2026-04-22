@@ -13,10 +13,6 @@ final class SystemPermissionService: PermissionService {
         )
     }
 
-    func requestInputMonitoringAccess() -> Bool {
-        false
-    }
-
     func requestAccessibilityAccess() -> Bool {
         if AXIsProcessTrusted() {
             return true
@@ -67,6 +63,7 @@ final class SystemPermissionService: PermissionService {
     private var accessibilityState: PermissionState {
         AXIsProcessTrusted() ? .granted : .needsSetup
     }
+
     private func preferenceURLs(for permission: SystemPermissionKind) -> [URL] {
         let rawValues: [String]
 

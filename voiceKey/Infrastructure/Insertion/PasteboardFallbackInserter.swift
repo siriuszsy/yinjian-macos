@@ -62,7 +62,7 @@ final class PasteboardFallbackInserter: TextInserter {
         }
 
         let activate = {
-            application.activate(options: [.activateIgnoringOtherApps])
+            _ = application.activate()
         }
 
         if Thread.isMainThread {
@@ -90,7 +90,7 @@ final class PasteboardFallbackInserter: TextInserter {
     }
 
     private func restorePasteboard(after delay: TimeInterval, previousString: String?) {
-        let restore = {
+        func restoreNow() {
             let pasteboard = NSPasteboard.general
             pasteboard.clearContents()
             if let previousString {
@@ -99,10 +99,18 @@ final class PasteboardFallbackInserter: TextInserter {
         }
 
         if delay == 0 {
-            restore()
+            if Thread.isMainThread {
+                restoreNow()
+            } else {
+                DispatchQueue.main.async {
+                    restoreNow()
+                }
+            }
             return
         }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: restore)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            restoreNow()
+        }
     }
 }

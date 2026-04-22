@@ -88,7 +88,7 @@ final class AXTextInserter: TextInserter {
             return nil
         }
 
-        return unsafeBitCast(value, to: AXUIElement.self)
+        return unsafeDowncast(value, to: AXUIElement.self)
     }
 
     private func replaceSelection(with insertedText: String, in element: AXUIElement) -> String? {
@@ -184,7 +184,7 @@ final class AXTextInserter: TextInserter {
             return nil
         }
 
-        let axValue = unsafeBitCast(value, to: AXValue.self)
+        let axValue = unsafeDowncast(value, to: AXValue.self)
         guard AXValueGetType(axValue) == .cfRange else {
             return nil
         }

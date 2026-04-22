@@ -5,20 +5,17 @@ final class FixedTextInsertionProbe {
     private let contextInspector: ContextInspector
     private let textInserter: TextInserter
     private let hudController: StatusHUDControlling
-    private let clock: Clock
 
     private var autoDismissWorkItem: DispatchWorkItem?
 
     init(
         contextInspector: ContextInspector,
         textInserter: TextInserter,
-        hudController: StatusHUDControlling,
-        clock: Clock
+        hudController: StatusHUDControlling
     ) {
         self.contextInspector = contextInspector
         self.textInserter = textInserter
         self.hudController = hudController
-        self.clock = clock
     }
 
     func run() {

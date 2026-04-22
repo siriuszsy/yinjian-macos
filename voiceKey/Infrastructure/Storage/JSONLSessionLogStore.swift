@@ -3,9 +3,11 @@ import Foundation
 final class JSONLSessionLogStore: SessionLogStore {
     private let paths: FileSystemPaths
     private let encoder = JSONEncoder()
+    private let logger: OSLogLogger
 
-    init(paths: FileSystemPaths) {
+    init(paths: FileSystemPaths, logger: OSLogLogger = OSLogLogger()) {
         self.paths = paths
+        self.logger = logger
         encoder.dateEncodingStrategy = .iso8601
     }
 
@@ -24,7 +26,7 @@ final class JSONLSessionLogStore: SessionLogStore {
                 try line.write(to: paths.sessionsLogURL, options: .atomic)
             }
         } catch {
-            // TODO: Wire up OSLog once logging infrastructure is live.
+            logger.error("[SessionLog] Failed to append record: \(error.localizedDescription)")
         }
     }
 }

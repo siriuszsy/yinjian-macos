@@ -1,4 +1,4 @@
-# 音键 1.0.1 使用手册
+# 音键 1.0.2 使用手册
 
 最后更新：2026-04-21
 
@@ -18,7 +18,7 @@
 ## 2. 下载与安装
 
 1. 打开 [GitHub Releases](https://github.com/siriuszsy/voiceKey/releases)。
-2. 下载 `voiceKey-1.0.1-macos.zip`。
+2. 下载 `voiceKey-1.0.2-macos.zip`。
 3. 解压后把 `voiceKey.app` 拖到 `Applications`。
 4. 首次启动时，如果 macOS 提示应用来自互联网或开发者未验证，先右键 `voiceKey.app`，选择“打开”。
 

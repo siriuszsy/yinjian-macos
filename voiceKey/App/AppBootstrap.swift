@@ -77,20 +77,10 @@ final class AppBootstrap {
             clock: clock,
             settingsStore: settingsStore
         )
-        let runtimePreviewCoordinator = RuntimeIndicatorPreviewCoordinator(
-            triggerEngine: triggerEngine,
-            recordingEngine: recordingEngine,
-            asrService: asrService,
-            hudController: hudController,
-            settingsStore: settingsStore,
-            sessionLogStore: sessionLogStore,
-            clock: clock
-        )
         let fixedTextInsertionProbe = FixedTextInsertionProbe(
             contextInspector: contextInspector,
             textInserter: textInserter,
-            hudController: hudController,
-            clock: clock
+            hudController: hudController
         )
 
         recordingEngine.levelObserver = orchestrator
@@ -110,7 +100,6 @@ final class AppBootstrap {
             textInserter: textInserter,
             hudController: hudController,
             orchestrator: orchestrator,
-            runtimePreviewCoordinator: runtimePreviewCoordinator,
             fixedTextInsertionProbe: fixedTextInsertionProbe
         )
     }

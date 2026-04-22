@@ -80,10 +80,6 @@ private final class StubPermissionService: PermissionService {
         )
     }
 
-    func requestInputMonitoringAccess() -> Bool {
-        false
-    }
-
     func requestAccessibilityAccess() -> Bool {
         true
     }

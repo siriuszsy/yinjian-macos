@@ -13,7 +13,6 @@ final class AppEnvironment {
     let textInserter: TextInserter
     let hudController: StatusHUDControlling
     let orchestrator: DictationOrchestrator
-    let runtimePreviewCoordinator: RuntimeIndicatorPreviewCoordinator
     let fixedTextInsertionProbe: FixedTextInsertionProbe
 
     init(
@@ -29,7 +28,6 @@ final class AppEnvironment {
         textInserter: TextInserter,
         hudController: StatusHUDControlling,
         orchestrator: DictationOrchestrator,
-        runtimePreviewCoordinator: RuntimeIndicatorPreviewCoordinator,
         fixedTextInsertionProbe: FixedTextInsertionProbe
     ) {
         self.settingsStore = settingsStore
@@ -44,7 +42,6 @@ final class AppEnvironment {
         self.textInserter = textInserter
         self.hudController = hudController
         self.orchestrator = orchestrator
-        self.runtimePreviewCoordinator = runtimePreviewCoordinator
         self.fixedTextInsertionProbe = fixedTextInsertionProbe
     }
 }
