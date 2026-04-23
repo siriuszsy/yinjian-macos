@@ -41,10 +41,10 @@ if [[ -z "$TEAM_ID" ]]; then
   exit 1
 fi
 
-DEVELOPER_ID_IDENTITY="$(
+DEVELOPER_ID_IDENTITY="${VOICEKEY_DEVELOPER_ID_IDENTITY:-$(
   security find-identity -v -p codesigning 2>&1 \
     | awk -F'"' '/Developer ID Application/ { print $2; exit }'
-)"
+)}"
 
 if [[ -z "$DEVELOPER_ID_IDENTITY" ]]; then
   echo "No valid Developer ID Application identity found." >&2
