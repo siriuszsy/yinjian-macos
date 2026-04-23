@@ -42,7 +42,7 @@ if [[ -z "$TEAM_ID" ]]; then
 fi
 
 DEVELOPER_ID_IDENTITY="$(
-  security find-identity -v -p codesigning \
+  security find-identity -v -p codesigning 2>&1 \
     | awk -F'"' '/Developer ID Application/ { print $2; exit }'
 )"
 
