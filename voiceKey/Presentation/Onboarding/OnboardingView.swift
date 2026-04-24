@@ -6,7 +6,7 @@ struct OnboardingView: View {
     @State private var testInput = ""
     @FocusState private var testFieldFocused: Bool
 
-    private let sidebarSteps = OnboardingStep.allCases
+    private let steps = OnboardingStep.allCases
 
     var body: some View {
         ZStack {
@@ -20,10 +20,17 @@ struct OnboardingView: View {
             )
             .ignoresSafeArea()
 
-            HStack(spacing: 0) {
-                sidebar
-                Divider()
-                content
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    topBar
+                    stepper
+                    summaryStrip
+                    contentCard
+                }
+                .frame(maxWidth: 760)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 28)
+                .frame(maxWidth: .infinity)
             }
         }
         .onAppear {
@@ -43,54 +50,62 @@ struct OnboardingView: View {
         }
     }
 
-    private var sidebar: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            VStack(alignment: .leading, spacing: 8) {
+    private var topBar: some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(BuildInfo.displayName)
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .font(.system(size: 26, weight: .bold, design: .rounded))
                 Text("首次使用向导")
-                    .font(.subheadline)
+                    .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
-                Text("先完成第一次成功输入，再谈更多设置。")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
-            VStack(spacing: 10) {
-                ForEach(sidebarSteps, id: \.rawValue) { step in
-                    stepButton(step)
-                }
             }
 
             Spacer()
 
-            VStack(alignment: .leading, spacing: 10) {
-                summaryChip(title: "API Key", value: viewModel.apiKeyStatusText)
-                summaryChip(title: "麦克风", value: viewModel.permissionStatus.microphone.title)
-                summaryChip(title: "写回模式", value: viewModel.writeModeLabel)
-            }
+            Text("4 步完成第一次输入")
+                .font(.caption.weight(.semibold))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color.white.opacity(0.62), in: Capsule())
         }
-        .padding(24)
-        .frame(width: 278)
-        .background(Color.white.opacity(0.35))
     }
 
-    private var content: some View {
-        ScrollView {
+    private var stepper: some View {
+        HStack(spacing: 10) {
+            ForEach(steps, id: \.rawValue) { step in
+                stepPill(step)
+            }
+        }
+    }
+
+    private var summaryStrip: some View {
+        HStack(spacing: 12) {
+            summaryChip(title: "API Key", value: viewModel.apiKeyStatusText)
+            summaryChip(title: "麦克风", value: viewModel.permissionStatus.microphone.title)
+            summaryChip(title: "写回模式", value: viewModel.writeModeLabel)
+        }
+    }
+
+    private var contentCard: some View {
+        card {
             VStack(alignment: .leading, spacing: 20) {
                 header
-                switch viewModel.currentStep {
-                case .welcome:
-                    welcomeStep
-                case .apiKey:
-                    apiKeyStep
-                case .permissions:
-                    permissionsStep
-                case .directWrite:
-                    directWriteStep
-                }
+                currentStepContent
             }
-            .padding(24)
+        }
+    }
+
+    @ViewBuilder
+    private var currentStepContent: some View {
+        switch viewModel.currentStep {
+        case .welcome:
+            welcomeStep
+        case .apiKey:
+            apiKeyStep
+        case .permissions:
+            permissionsStep
+        case .directWrite:
+            directWriteStep
         }
     }
 
@@ -147,22 +162,20 @@ struct OnboardingView: View {
     }
 
     private var apiKeyStep: some View {
-        HStack(alignment: .top, spacing: 18) {
-            VStack(alignment: .leading, spacing: 16) {
-                HStack(spacing: 10) {
-                    modeButton(title: "我已经有 Key", selected: viewModel.apiKeyMode == .haveKey) {
-                        viewModel.chooseHaveKey()
-                    }
-                    modeButton(title: "我还没有 Key", selected: viewModel.apiKeyMode == .needKey) {
-                        viewModel.chooseNeedKey()
-                    }
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 10) {
+                modeButton(title: "我已经有 Key", selected: viewModel.apiKeyMode == .haveKey) {
+                    viewModel.chooseHaveKey()
                 }
+                modeButton(title: "我还没有 Key", selected: viewModel.apiKeyMode == .needKey) {
+                    viewModel.chooseNeedKey()
+                }
+            }
 
-                if viewModel.apiKeyMode == .haveKey {
-                    inputCard
-                } else {
-                    applyKeyCard
-                }
+            if viewModel.apiKeyMode == .haveKey {
+                inputCard
+            } else {
+                applyKeyCard
             }
 
             VStack(alignment: .leading, spacing: 12) {
@@ -176,7 +189,33 @@ struct OnboardingView: View {
                     body: "默认主路径是“本次使用”。不要自动读取钥匙串，也不要一开始逼用户理解长期保存策略。"
                 )
             }
-            .frame(maxWidth: 280)
+        }
+    }
+
+    private var permissionsStep: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            infoCallout(
+                title: "这里把两类权限一起准备好",
+                copy: "麦克风决定能不能录音，辅助功能决定第一次测试能不能直接落到光标。但它们的动作和提示必须分清。",
+                tint: Color(red: 0.71, green: 0.49, blue: 0.11)
+            )
+
+            VStack(alignment: .leading, spacing: 14) {
+                microphonePermissionRow
+                accessibilityPermissionRow
+            }
+
+            HStack(spacing: 12) {
+                Button("开始直接写入测试") {
+                    viewModel.continueToDirectWriteTest()
+                }
+                .buttonStyle(OnboardingPrimaryButtonStyle())
+
+                Button("返回 API Key") {
+                    viewModel.move(to: .apiKey)
+                }
+                .buttonStyle(OnboardingSecondaryButtonStyle())
+            }
         }
     }
 
@@ -254,35 +293,6 @@ struct OnboardingView: View {
         }
     }
 
-    private var permissionsStep: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            infoCallout(
-                title: "这里把两类权限一起准备好",
-                copy: "麦克风决定能不能录音，辅助功能决定第一次测试能不能直接落到光标。但它们的动作和提示必须分清。",
-                tint: Color(red: 0.71, green: 0.49, blue: 0.11)
-            )
-
-            card {
-                VStack(alignment: .leading, spacing: 14) {
-                    microphonePermissionRow
-                    accessibilityPermissionRow
-                }
-            }
-
-            HStack(spacing: 12) {
-                Button("开始直接写入测试") {
-                    viewModel.continueToDirectWriteTest()
-                }
-                .buttonStyle(OnboardingPrimaryButtonStyle())
-
-                Button("返回 API Key") {
-                    viewModel.move(to: .apiKey)
-                }
-                .buttonStyle(OnboardingSecondaryButtonStyle())
-            }
-        }
-    }
-
     private var directWriteStep: some View {
         VStack(alignment: .leading, spacing: 18) {
             infoCallout(
@@ -291,51 +301,49 @@ struct OnboardingView: View {
                 tint: viewModel.accessibilityReady ? Color.green : Color.orange
             )
 
-            card {
-                VStack(alignment: .leading, spacing: 14) {
-                    HStack {
-                        Text("当前写回模式")
-                            .font(.headline)
-                        Spacer()
-                        Text(viewModel.writeModeLabel)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(viewModel.accessibilityReady ? Color.green : Color.orange)
-                    }
-
-                    TextEditor(text: $testInput)
-                        .focused($testFieldFocused)
-                        .font(.system(size: 15))
-                        .frame(minHeight: 220)
-                        .padding(10)
-                        .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .stroke(Color.black.opacity(0.08), lineWidth: 1)
-                        )
-
-                    HStack(spacing: 10) {
-                        Button("点这里聚焦测试框") {
-                            testFieldFocused = true
-                        }
-                        .buttonStyle(OnboardingSecondaryButtonStyle())
-
-                        Button("写入测试文本") {
-                            testFieldFocused = true
-                            viewModel.runWriteTest()
-                        }
-                        .buttonStyle(OnboardingPrimaryButtonStyle())
-
-                        Button("清空测试框") {
-                            testInput = ""
-                            testFieldFocused = true
-                        }
-                        .buttonStyle(OnboardingGhostButtonStyle())
-                    }
-
-                    Text("推荐测试句：今天先测试第一句听写。也可以先点“写入测试文本”验证当前光标写回链路。")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 14) {
+                HStack {
+                    Text("当前写回模式")
+                        .font(.headline)
+                    Spacer()
+                    Text(viewModel.writeModeLabel)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(viewModel.accessibilityReady ? Color.green : Color.orange)
                 }
+
+                TextEditor(text: $testInput)
+                    .focused($testFieldFocused)
+                    .font(.system(size: 15))
+                    .frame(minHeight: 220)
+                    .padding(10)
+                    .background(Color.white.opacity(0.72), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(Color.black.opacity(0.08), lineWidth: 1)
+                    )
+
+                HStack(spacing: 10) {
+                    Button("点这里聚焦测试框") {
+                        testFieldFocused = true
+                    }
+                    .buttonStyle(OnboardingSecondaryButtonStyle())
+
+                    Button("写入测试文本") {
+                        testFieldFocused = true
+                        viewModel.runWriteTest()
+                    }
+                    .buttonStyle(OnboardingPrimaryButtonStyle())
+
+                    Button("清空测试框") {
+                        testInput = ""
+                        testFieldFocused = true
+                    }
+                    .buttonStyle(OnboardingGhostButtonStyle())
+                }
+
+                Text("推荐测试句：今天先测试第一句听写。也可以先点“写入测试文本”验证当前光标写回链路。")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
 
             HStack(spacing: 12) {
@@ -352,11 +360,11 @@ struct OnboardingView: View {
         }
     }
 
-    private func stepButton(_ step: OnboardingStep) -> some View {
+    private func stepPill(_ step: OnboardingStep) -> some View {
         Button {
             viewModel.move(to: step)
         } label: {
-            HStack(alignment: .top, spacing: 12) {
+            HStack(alignment: .center, spacing: 10) {
                 Text("\(step.rawValue + 1)")
                     .font(.caption.weight(.bold))
                     .foregroundStyle(viewModel.currentStep == step ? Color.white : Color.secondary)
@@ -366,13 +374,14 @@ struct OnboardingView: View {
                         in: Circle()
                     )
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(step.title)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.primary)
                     Text(step.subtitle)
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                        .lineLimit(1)
                 }
 
                 Spacer()
